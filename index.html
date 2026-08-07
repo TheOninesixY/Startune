@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="system" data-color="google-blue">
+<html lang="zh-CN" data-theme="system">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,22 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0" rel="stylesheet" />
     <style>
         :root {
-            /* Base Material Shapes & Motion Tokens */
-            --md-shape-corner-full: 9999px;
-            --md-shape-corner-extra-large: 28px;
-            --md-shape-corner-large: 16px;
-            --md-shape-corner-medium: 12px;
-            --md-shape-corner-small: 8px;
-
-            --transition-fast: 0.15s cubic-bezier(0.2, 0, 0, 1);
-            --transition-medium: 0.25s cubic-bezier(0.2, 0, 0, 1);
-            --transition-spring: 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
-        }
-
-        /* ================= COLOR PALETTES (Subtle & Desaturated Material You Tones) ================= */
-
-        /* --- 1. GOOGLE BLUE (Subtle & Soft) --- */
-        :root[data-color="google-blue"] {
+            /* Default dynamic variables fallback */
             --md-sys-color-primary: #1a73e8;
             --md-sys-color-on-primary: #ffffff;
             --md-sys-color-primary-container: #e8f0fe;
@@ -43,229 +28,18 @@
             --md-sys-color-on-surface-variant: #545b66;
             --md-sys-color-outline: #858d99;
             --md-sys-color-outline-variant: #d8e1ed;
+
+            /* Base Material Shapes & Motion Tokens */
+            --md-shape-corner-full: 9999px;
+            --md-shape-corner-extra-large: 28px;
+            --md-shape-corner-large: 16px;
+            --md-shape-corner-medium: 12px;
+            --md-shape-corner-small: 8px;
+
+            --transition-fast: 0.15s cubic-bezier(0.2, 0, 0, 1);
+            --transition-medium: 0.25s cubic-bezier(0.2, 0, 0, 1);
+            --transition-spring: 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
         }
-
-        @media (prefers-color-scheme: dark) {
-            :root[data-theme="system"][data-color="google-blue"] {
-                --md-sys-color-primary: #a8c7fa;
-                --md-sys-color-on-primary: #041e49;
-                --md-sys-color-primary-container: #08427b;
-                --md-sys-color-on-primary-container: #d3e3fd;
-
-                --md-sys-color-surface: #121519;
-                --md-sys-color-surface-container-lowest: #0d0f12;
-                --md-sys-color-surface-container-low: #161a1f;
-                --md-sys-color-surface-container: #1a1e24;
-                --md-sys-color-surface-container-high: #21262d;
-                --md-sys-color-surface-container-highest: #282e36;
-
-                --md-sys-color-on-surface: #e1e5eb;
-                --md-sys-color-on-surface-variant: #c2c7d0;
-                --md-sys-color-outline: #8c929e;
-                --md-sys-color-outline-variant: #2e3540;
-            }
-        }
-
-        :root[data-theme="dark"][data-color="google-blue"] {
-            --md-sys-color-primary: #a8c7fa;
-            --md-sys-color-on-primary: #041e49;
-            --md-sys-color-primary-container: #08427b;
-            --md-sys-color-on-primary-container: #d3e3fd;
-
-            --md-sys-color-surface: #121519;
-            --md-sys-color-surface-container-lowest: #0d0f12;
-            --md-sys-color-surface-container-low: #161a1f;
-            --md-sys-color-surface-container: #1a1e24;
-            --md-sys-color-surface-container-high: #21262d;
-            --md-sys-color-surface-container-highest: #282e36;
-
-            --md-sys-color-on-surface: #e1e5eb;
-            --md-sys-color-on-surface-variant: #c2c7d0;
-            --md-sys-color-outline: #8c929e;
-            --md-sys-color-outline-variant: #2e3540;
-        }
-
-        /* --- 2. EMERALD GREEN (Subtle & Soft) --- */
-        :root[data-color="emerald-green"] {
-            --md-sys-color-primary: #0f9d58;
-            --md-sys-color-on-primary: #ffffff;
-            --md-sys-color-primary-container: #e6f6eb;
-            --md-sys-color-on-primary-container: #0d6538;
-
-            --md-sys-color-surface: #f5f9f6;
-            --md-sys-color-surface-container-lowest: #ffffff;
-            --md-sys-color-surface-container-low: #eff6f1;
-            --md-sys-color-surface-container: #e7f1eb;
-            --md-sys-color-surface-container-high: #deebe3;
-            --md-sys-color-surface-container-highest: #d3e3d9;
-
-            --md-sys-color-on-surface: #1d2420;
-            --md-sys-color-on-surface-variant: #505c54;
-            --md-sys-color-outline: #808d84;
-            --md-sys-color-outline-variant: #d2e3d7;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root[data-theme="system"][data-color="emerald-green"] {
-                --md-sys-color-primary: #85d9a5;
-                --md-sys-color-on-primary: #003915;
-                --md-sys-color-primary-container: #005222;
-                --md-sys-color-on-primary-container: #c4eed0;
-
-                --md-sys-color-surface: #111713;
-                --md-sys-color-surface-container-lowest: #0c110e;
-                --md-sys-color-surface-container-low: #151d18;
-                --md-sys-color-surface-container: #19221d;
-                --md-sys-color-surface-container-high: #202b25;
-                --md-sys-color-surface-container-highest: #27342d;
-
-                --md-sys-color-on-surface: #e0e7e2;
-                --md-sys-color-on-surface-variant: #c0c9c2;
-                --md-sys-color-outline: #8a948c;
-                --md-sys-color-outline-variant: #2b3930;
-            }
-        }
-
-        :root[data-theme="dark"][data-color="emerald-green"] {
-            --md-sys-color-primary: #85d9a5;
-            --md-sys-color-on-primary: #003915;
-            --md-sys-color-primary-container: #005222;
-            --md-sys-color-on-primary-container: #c4eed0;
-
-            --md-sys-color-surface: #111713;
-            --md-sys-color-surface-container-lowest: #0c110e;
-            --md-sys-color-surface-container-low: #151d18;
-            --md-sys-color-surface-container: #19221d;
-            --md-sys-color-surface-container-high: #202b25;
-            --md-sys-color-surface-container-highest: #27342d;
-
-            --md-sys-color-on-surface: #e0e7e2;
-            --md-sys-color-on-surface-variant: #c0c9c2;
-            --md-sys-color-outline: #8a948c;
-            --md-sys-color-outline-variant: #2b3930;
-        }
-
-        /* --- 3. CORAL ORANGE (Subtle & Soft) --- */
-        :root[data-color="coral-orange"] {
-            --md-sys-color-primary: #e37400;
-            --md-sys-color-on-primary: #ffffff;
-            --md-sys-color-primary-container: #fef0e4;
-            --md-sys-color-on-primary-container: #8c4300;
-
-            --md-sys-color-surface: #faf6f2;
-            --md-sys-color-surface-container-lowest: #ffffff;
-            --md-sys-color-surface-container-low: #f6efe8;
-            --md-sys-color-surface-container: #f0e7df;
-            --md-sys-color-surface-container-high: #e8ded4;
-            --md-sys-color-surface-container-highest: #ded2c7;
-
-            --md-sys-color-on-surface: #24201c;
-            --md-sys-color-on-surface-variant: #5d544c;
-            --md-sys-color-outline: #8e847b;
-            --md-sys-color-outline-variant: #e5d8cc;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root[data-theme="system"][data-color="coral-orange"] {
-                --md-sys-color-primary: #ffb77c;
-                --md-sys-color-on-primary: #4a2800;
-                --md-sys-color-primary-container: #6a3c00;
-                --md-sys-color-on-primary-container: #ffdcbe;
-
-                --md-sys-color-surface: #181411;
-                --md-sys-color-surface-container-lowest: #120f0d;
-                --md-sys-color-surface-container-low: #1d1915;
-                --md-sys-color-surface-container: #221d19;
-                --md-sys-color-surface-container-high: #2b2520;
-                --md-sys-color-surface-container-highest: #332d27;
-
-                --md-sys-color-on-surface: #ebe4dd;
-                --md-sys-color-on-surface-variant: #cbc1b7;
-                --md-sys-color-outline: #968c83;
-                --md-sys-color-outline-variant: #3a322b;
-            }
-        }
-
-        :root[data-theme="dark"][data-color="coral-orange"] {
-            --md-sys-color-primary: #ffb77c;
-            --md-sys-color-on-primary: #4a2800;
-            --md-sys-color-primary-container: #6a3c00;
-            --md-sys-color-on-primary-container: #ffdcbe;
-
-            --md-sys-color-surface: #181411;
-            --md-sys-color-surface-container-lowest: #120f0d;
-            --md-sys-color-surface-container-low: #1d1915;
-            --md-sys-color-surface-container: #221d19;
-            --md-sys-color-surface-container-high: #2b2520;
-            --md-sys-color-surface-container-highest: #332d27;
-
-            --md-sys-color-on-surface: #ebe4dd;
-            --md-sys-color-on-surface-variant: #cbc1b7;
-            --md-sys-color-outline: #968c83;
-            --md-sys-color-outline-variant: #3a322b;
-        }
-
-        /* --- 4. LAVENDER PURPLE (Subtle & Soft) --- */
-        :root[data-color="lavender-purple"] {
-            --md-sys-color-primary: #8e24aa;
-            --md-sys-color-on-primary: #ffffff;
-            --md-sys-color-primary-container: #f6ebfc;
-            --md-sys-color-on-primary-container: #5c1170;
-
-            --md-sys-color-surface: #f8f5fa;
-            --md-sys-color-surface-container-lowest: #ffffff;
-            --md-sys-color-surface-container-low: #f3edf6;
-            --md-sys-color-surface-container: #ebdff0;
-            --md-sys-color-surface-container-high: #e2d4e7;
-            --md-sys-color-surface-container-highest: #d7c6dd;
-
-            --md-sys-color-on-surface: #221e26;
-            --md-sys-color-on-surface-variant: #57505d;
-            --md-sys-color-outline: #898190;
-            --md-sys-color-outline-variant: #e0d2e5;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root[data-theme="system"][data-color="lavender-purple"] {
-                --md-sys-color-primary: #e2b6ff;
-                --md-sys-color-on-primary: #4e007d;
-                --md-sys-color-primary-container: #6f00af;
-                --md-sys-color-on-primary-container: #f3daff;
-
-                --md-sys-color-surface: #161219;
-                --md-sys-color-surface-container-lowest: #100d13;
-                --md-sys-color-surface-container-low: #1b1720;
-                --md-sys-color-surface-container: #201b26;
-                --md-sys-color-surface-container-high: #28222f;
-                --md-sys-color-surface-container-highest: #312a3a;
-
-                --md-sys-color-on-surface: #e9e2ed;
-                --md-sys-color-on-surface-variant: #c9bed0;
-                --md-sys-color-outline: #93899a;
-                --md-sys-color-outline-variant: #372f3e;
-            }
-        }
-
-        :root[data-theme="dark"][data-color="lavender-purple"] {
-            --md-sys-color-primary: #e2b6ff;
-            --md-sys-color-on-primary: #4e007d;
-            --md-sys-color-primary-container: #6f00af;
-            --md-sys-color-on-primary-container: #f3daff;
-
-            --md-sys-color-surface: #161219;
-            --md-sys-color-surface-container-lowest: #100d13;
-            --md-sys-color-surface-container-low: #1b1720;
-            --md-sys-color-surface-container: #201b26;
-            --md-sys-color-surface-container-high: #28222f;
-            --md-sys-color-surface-container-highest: #312a3a;
-
-            --md-sys-color-on-surface: #e9e2ed;
-            --md-sys-color-on-surface-variant: #c9bed0;
-            --md-sys-color-outline: #93899a;
-            --md-sys-color-outline-variant: #372f3e;
-        }
-
-        /* ================= GENERAL STYLES ================= */
 
         * {
             box-sizing: border-box;
@@ -273,6 +47,15 @@
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
+        }
+
+        a, a * {
+            text-decoration: none;
+        }
+
+        img {
+            border: none;
+            outline: none;
         }
 
         body {
@@ -554,12 +337,16 @@
             gap: 10px;
             text-decoration: none;
             color: var(--md-sys-color-on-surface);
-            transition: background var(--transition-fast);
+            transition: background var(--transition-fast), transform var(--transition-fast);
             position: relative;
         }
 
         .shortcut-card:hover {
             background: var(--md-sys-color-surface-container);
+        }
+
+        .shortcut-card:active {
+            transform: scale(0.97);
         }
 
         .shortcut-icon-wrapper {
@@ -601,27 +388,6 @@
             padding: 0 4px;
         }
 
-        .shortcut-delete-btn {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--md-sys-color-surface-container-highest);
-            color: var(--md-sys-color-on-surface-variant);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-        }
-
-        .shortcut-card:hover .shortcut-delete-btn {
-            display: flex;
-        }
-
         .add-shortcut-card {
             border: 2px dashed var(--md-sys-color-outline-variant);
             background: transparent;
@@ -631,6 +397,55 @@
         .add-shortcut-card:hover {
             border-color: var(--md-sys-color-primary);
             background: var(--md-sys-color-surface-container-low);
+        }
+
+        /* Material Context Menu for Shortcuts */
+        .context-menu {
+            position: fixed;
+            background: var(--md-sys-color-surface-container-lowest);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            border-radius: var(--md-shape-corner-large);
+            padding: 6px;
+            display: none;
+            flex-direction: column;
+            gap: 2px;
+            z-index: 2000;
+            min-width: 140px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .context-menu.active {
+            display: flex;
+            animation: slideDown 0.12s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .context-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: var(--md-shape-corner-medium);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface);
+            transition: background var(--transition-fast);
+        }
+
+        .context-menu-item:hover {
+            background: var(--md-sys-color-surface-container-high);
+        }
+
+        .context-menu-item.danger {
+            color: #d93025;
+        }
+
+        .context-menu-item.danger:hover {
+            background: #fce8e6;
+        }
+
+        [data-theme="dark"] .context-menu-item.danger:hover {
+            background: #410e0b;
         }
 
         /* Footer Empty Spacer */
@@ -755,6 +570,98 @@
             font-size: 18px;
         }
 
+        /* Custom Color Picker Options */
+        .color-palette-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .color-palette-options {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .color-dot {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform var(--transition-fast);
+            flex-shrink: 0;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.1);
+        }
+
+        .color-dot.active {
+            border-color: var(--md-sys-color-on-surface);
+        }
+
+        .custom-color-wrapper {
+            position: relative;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--md-sys-color-surface-container-high);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            cursor: pointer;
+            transition: transform var(--transition-fast);
+        }
+
+        .custom-color-wrapper:hover {
+            transform: scale(1.1);
+        }
+
+        .custom-color-input {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 60px;
+            height: 60px;
+            border: none;
+            cursor: pointer;
+            opacity: 0;
+        }
+
+        .hex-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--md-sys-color-surface-container-low);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            border-radius: var(--md-shape-corner-medium);
+            padding: 0 10px;
+            height: 34px;
+            flex: 1;
+        }
+
+        .hex-input-prefix {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--md-sys-color-outline);
+        }
+
+        .hex-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: monospace;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface);
+            outline: none;
+            text-transform: uppercase;
+        }
+
         .modal-actions {
             display: flex;
             justify-content: flex-end;
@@ -792,30 +699,6 @@
 
         .btn-filled:hover {
             opacity: 0.9;
-        }
-
-        /* Color Theme Options */
-        .color-palette-options {
-            display: flex;
-            gap: 12px;
-            margin-top: 6px;
-        }
-
-        .color-dot {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: transform var(--transition-fast);
-        }
-
-        .color-dot:hover {
-            transform: scale(1.1);
-        }
-
-        .color-dot.active {
-            border-color: var(--md-sys-color-on-surface);
         }
 
         /* Keyframes */
@@ -891,13 +774,25 @@
         </div>
     </main>
 
+    <!-- Context Menu for Shortcuts -->
+    <div class="context-menu" id="shortcutContextMenu">
+        <div class="context-menu-item" id="ctxEdit">
+            <span class="material-symbols-rounded" style="font-size: 18px;">edit</span>
+            <span>修改</span>
+        </div>
+        <div class="context-menu-item danger" id="ctxDelete">
+            <span class="material-symbols-rounded" style="font-size: 18px;">delete</span>
+            <span>删除</span>
+        </div>
+    </div>
+
     <!-- Footer Empty Spacer -->
     <footer></footer>
 
-    <!-- Add Shortcut Modal -->
+    <!-- Add/Edit Shortcut Modal -->
     <div class="modal-overlay" id="shortcutModal">
         <div class="modal-card">
-            <div class="modal-title">
+            <div class="modal-title" id="shortcutModalTitle">
                 <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">add_link</span>
                 添加快捷方式
             </div>
@@ -941,12 +836,22 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>主题色彩</label>
-                <div class="color-palette-options">
-                    <div class="color-dot active" style="background: #1a73e8;" data-color-val="google-blue" title="Google 蓝"></div>
-                    <div class="color-dot" style="background: #0f9d58;" data-color-val="emerald-green" title="翡翠绿"></div>
-                    <div class="color-dot" style="background: #e37400;" data-color-val="coral-orange" title="珊瑚橙"></div>
-                    <div class="color-dot" style="background: #a142f4;" data-color-val="lavender-purple" title="薰衣紫"></div>
+                <label>主题主色 (Accent Seed Color)</label>
+                <div class="color-palette-container">
+                    <div class="color-palette-options">
+                        <div class="color-dot" style="background: #1a73e8;" data-color-val="#1a73e8" title="Google 蓝"></div>
+                        <div class="color-dot" style="background: #0f9d58;" data-color-val="#0f9d58" title="翡翠绿"></div>
+                        <div class="color-dot" style="background: #e37400;" data-color-val="#e37400" title="珊瑚橙"></div>
+                        <div class="color-dot" style="background: #a142f4;" data-color-val="#a142f4" title="薰衣紫"></div>
+                    </div>
+                    <div class="custom-color-wrapper" title="自定义调色盘">
+                        <span class="material-symbols-rounded" style="font-size: 20px; color: var(--md-sys-color-on-surface-variant);">colorize</span>
+                        <input type="color" id="customColorPicker" class="custom-color-input" value="#1a73e8">
+                    </div>
+                    <div class="hex-input-wrapper">
+                        <span class="hex-input-prefix">#</span>
+                        <input type="text" id="hexInput" class="hex-input" placeholder="1A73E8" maxlength="6">
+                    </div>
                 </div>
             </div>
             <div class="modal-actions">
@@ -970,7 +875,128 @@
         // --- State Management ---
         let shortcuts = JSON.parse(localStorage.getItem('startune_shortcuts')) || defaultShortcuts;
         let currentTheme = localStorage.getItem('startune_theme') || 'system';
-        let currentColor = localStorage.getItem('startune_color') || 'google-blue';
+        let currentSeedColor = localStorage.getItem('startune_seed_color') || '#1a73e8';
+        let editingShortcutIndex = -1; // -1 means adding new
+        let activeShortcutIndex = -1;  // index selected for context menu
+
+        // --- Material You Dynamic Color Algorithm ---
+        function hexToHsl(hex) {
+            hex = hex.replace(/^#/, '');
+            if (hex.length === 3) {
+                hex = hex.split('').map(c => c + c).join('');
+            }
+            const r = parseInt(hex.substring(0, 2), 16) / 255;
+            const g = parseInt(hex.substring(2, 4), 16) / 255;
+            const b = parseInt(hex.substring(4, 6), 16) / 255;
+
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h = 0, s = 0, l = (max + min) / 2;
+
+            if (max !== min) {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+        }
+
+        function isDarkEffective() {
+            if (currentTheme === 'dark') return true;
+            if (currentTheme === 'light') return false;
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        function generateMaterialTheme(seedHex) {
+            const { h, s } = hexToHsl(seedHex);
+            const isDark = isDarkEffective();
+
+            const softChroma = Math.min(s, 45);
+            let tokens = {};
+
+            if (!isDark) {
+                tokens = {
+                    '--md-sys-color-primary': seedHex,
+                    '--md-sys-color-on-primary': '#ffffff',
+                    '--md-sys-color-primary-container': `hsl(${h}, ${Math.min(softChroma + 15, 60)}%, 93%)`,
+                    '--md-sys-color-on-primary-container': `hsl(${h}, ${Math.max(softChroma, 50)}%, 25%)`,
+
+                    '--md-sys-color-surface': `hsl(${h}, ${Math.min(softChroma, 15)}%, 97%)`,
+                    '--md-sys-color-surface-container-lowest': '#ffffff',
+                    '--md-sys-color-surface-container-low': `hsl(${h}, ${Math.min(softChroma, 18)}%, 95%)`,
+                    '--md-sys-color-surface-container': `hsl(${h}, ${Math.min(softChroma, 20)}%, 92%)`,
+                    '--md-sys-color-surface-container-high': `hsl(${h}, ${Math.min(softChroma, 22)}%, 89%)`,
+                    '--md-sys-color-surface-container-highest': `hsl(${h}, ${Math.min(softChroma, 25)}%, 86%)`,
+
+                    '--md-sys-color-on-surface': `hsl(${h}, 10%, 14%)`,
+                    '--md-sys-color-on-surface-variant': `hsl(${h}, 12%, 36%)`,
+                    '--md-sys-color-outline': `hsl(${h}, 10%, 55%)`,
+                    '--md-sys-color-outline-variant': `hsl(${h}, ${Math.min(softChroma, 22)}%, 88%)`
+                };
+            } else {
+                tokens = {
+                    '--md-sys-color-primary': `hsl(${h}, ${Math.min(softChroma + 20, 85)}%, 80%)`,
+                    '--md-sys-color-on-primary': `hsl(${h}, ${Math.max(softChroma, 60)}%, 15%)`,
+                    '--md-sys-color-primary-container': `hsl(${h}, ${Math.max(softChroma, 50)}%, 26%)`,
+                    '--md-sys-color-on-primary-container': `hsl(${h}, ${Math.min(softChroma, 60)}%, 90%)`,
+
+                    '--md-sys-color-surface': `hsl(${h}, ${Math.min(softChroma, 15)}%, 9%)`,
+                    '--md-sys-color-surface-container-lowest': `hsl(${h}, ${Math.min(softChroma, 15)}%, 6%)`,
+                    '--md-sys-color-surface-container-low': `hsl(${h}, ${Math.min(softChroma, 15)}%, 11%)`,
+                    '--md-sys-color-surface-container': `hsl(${h}, ${Math.min(softChroma, 15)}%, 14%)`,
+                    '--md-sys-color-surface-container-high': `hsl(${h}, ${Math.min(softChroma, 15)}%, 18%)`,
+                    '--md-sys-color-surface-container-highest': `hsl(${h}, ${Math.min(softChroma, 15)}%, 22%)`,
+
+                    '--md-sys-color-on-surface': `hsl(${h}, 10%, 90%)`,
+                    '--md-sys-color-on-surface-variant': `hsl(${h}, 12%, 78%)`,
+                    '--md-sys-color-outline': `hsl(${h}, 10%, 55%)`,
+                    '--md-sys-color-outline-variant': `hsl(${h}, ${Math.min(softChroma, 18)}%, 24%)`
+                };
+            }
+
+            const root = document.documentElement;
+            Object.keys(tokens).forEach(key => {
+                root.style.setProperty(key, tokens[key]);
+            });
+        }
+
+        // --- Apply Theme & Color ---
+        function applyColor(seedHex) {
+            currentSeedColor = seedHex;
+            localStorage.setItem('startune_seed_color', seedHex);
+
+            document.getElementById('customColorPicker').value = seedHex;
+            document.getElementById('hexInput').value = seedHex.replace('#', '').toUpperCase();
+
+            document.querySelectorAll('.color-dot').forEach(dot => {
+                const val = dot.getAttribute('data-color-val').toLowerCase();
+                dot.classList.toggle('active', val === seedHex.toLowerCase());
+            });
+
+            generateMaterialTheme(seedHex);
+        }
+
+        function applyTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('startune_theme', theme);
+
+            document.querySelectorAll('.theme-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.getAttribute('data-theme-val') === theme);
+            });
+
+            generateMaterialTheme(currentSeedColor);
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if (currentTheme === 'system') {
+                generateMaterialTheme(currentSeedColor);
+            }
+        });
 
         // --- Clock & Greeting Logic ---
         function updateClock() {
@@ -979,11 +1005,9 @@
             const minutes = String(now.getMinutes()).padStart(2, '0');
             document.getElementById('clock').textContent = `${hours}:${minutes}`;
 
-            // Date
             const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
             document.getElementById('date').textContent = now.toLocaleDateString('zh-CN', options);
 
-            // Greeting
             const hour = now.getHours();
             let greeting = '你好，准备好开始新的一天了吗？';
             let icon = 'wb_sunny';
@@ -1005,6 +1029,43 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // --- Context Menu Management ---
+        const contextMenu = document.getElementById('shortcutContextMenu');
+
+        function showContextMenu(e, index) {
+            e.preventDefault();
+            e.stopPropagation();
+            activeShortcutIndex = index;
+
+            // Position context menu
+            contextMenu.style.left = `${e.clientX || e.touches[0].clientX}px`;
+            contextMenu.style.top = `${e.clientY || e.touches[0].clientY}px`;
+            contextMenu.classList.add('active');
+        }
+
+        function hideContextMenu() {
+            contextMenu.classList.remove('active');
+        }
+
+        document.addEventListener('click', hideContextMenu);
+        document.addEventListener('scroll', hideContextMenu);
+
+        document.getElementById('ctxEdit').addEventListener('click', () => {
+            if (activeShortcutIndex !== -1) {
+                openEditShortcutModal(activeShortcutIndex);
+            }
+            hideContextMenu();
+        });
+
+        document.getElementById('ctxDelete').addEventListener('click', () => {
+            if (activeShortcutIndex !== -1) {
+                shortcuts.splice(activeShortcutIndex, 1);
+                saveShortcuts();
+                renderShortcuts();
+            }
+            hideContextMenu();
+        });
+
         // --- Render Shortcuts ---
         function renderShortcuts() {
             const container = document.getElementById('shortcutsContainer');
@@ -1019,7 +1080,6 @@
                 const faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(item.url).hostname}&sz=64`;
 
                 card.innerHTML = `
-                    <button class="shortcut-delete-btn" data-index="${index}" title="删除">✕</button>
                     <div class="shortcut-icon-wrapper">
                         <img src="${faviconUrl}" alt="${item.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="shortcut-icon-fallback" style="display:none;">
@@ -1028,6 +1088,20 @@
                     </div>
                     <div class="shortcut-title">${item.name}</div>
                 `;
+
+                // Right click event
+                card.addEventListener('contextmenu', (e) => showContextMenu(e, index));
+
+                // Long press event for mobile/touch
+                let pressTimer = null;
+                card.addEventListener('touchstart', (e) => {
+                    pressTimer = setTimeout(() => {
+                        showContextMenu(e, index);
+                    }, 500);
+                }, { passive: true });
+
+                card.addEventListener('touchend', () => clearTimeout(pressTimer));
+                card.addEventListener('touchmove', () => clearTimeout(pressTimer));
 
                 container.appendChild(card);
             });
@@ -1044,20 +1118,8 @@
                 </div>
                 <div class="shortcut-title" style="color: var(--md-sys-color-primary);">添加快捷方式</div>
             `;
-            addCard.addEventListener('click', () => openModal('shortcutModal'));
+            addCard.addEventListener('click', openAddShortcutModal);
             container.appendChild(addCard);
-
-            // Bind Delete Events
-            document.querySelectorAll('.shortcut-delete-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const idx = btn.getAttribute('data-index');
-                    shortcuts.splice(idx, 1);
-                    saveShortcuts();
-                    renderShortcuts();
-                });
-            });
         }
 
         function saveShortcuts() {
@@ -1066,7 +1128,30 @@
 
         renderShortcuts();
 
-        // --- Add Shortcut Modal Handlers ---
+        // --- Add/Edit Shortcut Modal Handlers ---
+        function openAddShortcutModal() {
+            editingShortcutIndex = -1;
+            document.getElementById('shortcutModalTitle').innerHTML = `
+                <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">add_link</span>
+                添加快捷方式
+            `;
+            document.getElementById('siteName').value = '';
+            document.getElementById('siteUrl').value = '';
+            openModal('shortcutModal');
+        }
+
+        function openEditShortcutModal(index) {
+            editingShortcutIndex = index;
+            const item = shortcuts[index];
+            document.getElementById('shortcutModalTitle').innerHTML = `
+                <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">edit</span>
+                修改快捷方式
+            `;
+            document.getElementById('siteName').value = item.name;
+            document.getElementById('siteUrl').value = item.url;
+            openModal('shortcutModal');
+        }
+
         document.getElementById('saveShortcutBtn').addEventListener('click', () => {
             const name = document.getElementById('siteName').value.trim();
             let url = document.getElementById('siteUrl').value.trim();
@@ -1080,7 +1165,13 @@
                 url = 'https://' + url;
             }
 
-            shortcuts.push({ name, url, icon: 'public' });
+            if (editingShortcutIndex === -1) {
+                shortcuts.push({ name, url, icon: 'public' });
+            } else {
+                shortcuts[editingShortcutIndex].name = name;
+                shortcuts[editingShortcutIndex].url = url;
+            }
+
             saveShortcuts();
             renderShortcuts();
 
@@ -1121,27 +1212,7 @@
             });
         });
 
-        // --- Theme & Color Accent Switcher ---
-        function applyTheme(theme) {
-            currentTheme = theme;
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('startune_theme', theme);
-
-            document.querySelectorAll('.theme-chip').forEach(chip => {
-                chip.classList.toggle('active', chip.getAttribute('data-theme-val') === theme);
-            });
-        }
-
-        function applyColor(color) {
-            currentColor = color;
-            document.documentElement.setAttribute('data-color', color);
-            localStorage.setItem('startune_color', color);
-
-            document.querySelectorAll('.color-dot').forEach(dot => {
-                dot.classList.toggle('active', dot.getAttribute('data-color-val') === color);
-            });
-        }
-
+        // --- Event Listeners for Theme & Colors ---
         document.querySelectorAll('.theme-chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 applyTheme(chip.getAttribute('data-theme-val'));
@@ -1154,13 +1225,27 @@
             });
         });
 
+        const customColorPicker = document.getElementById('customColorPicker');
+        const hexInput = document.getElementById('hexInput');
+
+        customColorPicker.addEventListener('input', (e) => {
+            applyColor(e.target.value);
+        });
+
+        hexInput.addEventListener('input', (e) => {
+            let val = e.target.value.trim().replace(/^#/, '');
+            if (val.length === 6 && /^[0-9A-Fa-f]{6}$/.test(val)) {
+                applyColor('#' + val);
+            }
+        });
+
         // Settings Modal Handlers
         document.getElementById('settingsBtn').addEventListener('click', () => openModal('settingsModal'));
         document.getElementById('closeSettingsBtn').addEventListener('click', () => closeModal('settingsModal'));
 
-        // Initialize theme & color
+        // Initialize Theme & Color Algorithm
         applyTheme(currentTheme);
-        applyColor(currentColor);
+        applyColor(currentSeedColor);
 
         // Modal Helpers
         function openModal(id) {
