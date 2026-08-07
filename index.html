@@ -911,8 +911,30 @@
             return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         }
 
+        function hslToHex(h, s, l) {
+            l /= 100;
+            const a = s * Math.min(l, 1 - l) / 100;
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, '0');
+            };
+            return `#${f(0)}${f(8)}${f(4)}`;
+        }
+
+        // Clamp seed lightness so hyper-bright colors don't break contrast/readability
+        function clampSeedColor(hex) {
+            let { h, s, l } = hexToHsl(hex);
+            if (l > 65) {
+                l = 65; // cap max lightness to 65% for readability
+                return hslToHex(h, s, l);
+            }
+            return hex;
+        }
+
         function generateMaterialTheme(seedHex) {
-            const { h, s } = hexToHsl(seedHex);
+            const safeSeedHex = clampSeedColor(seedHex);
+            const { h, s } = hexToHsl(safeSeedHex);
             const isDark = isDarkEffective();
 
             const softChroma = Math.min(s, 45);
@@ -920,7 +942,7 @@
 
             if (!isDark) {
                 tokens = {
-                    '--md-sys-color-primary': seedHex,
+                    '--md-sys-color-primary': safeSeedHex,
                     '--md-sys-color-on-primary': '#ffffff',
                     '--md-sys-color-primary-container': `hsl(${h}, ${Math.min(softChroma + 15, 60)}%, 93%)`,
                     '--md-sys-color-on-primary-container': `hsl(${h}, ${Math.max(softChroma, 50)}%, 25%)`,
