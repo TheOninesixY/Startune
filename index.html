@@ -689,7 +689,7 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
@@ -715,6 +715,44 @@
             background: var(--md-sys-color-surface-container-lowest);
             border-color: var(--md-sys-color-primary);
             border-width: 2px;
+        }
+
+        /* Segmented Buttons for Theme Selector */
+        .theme-options {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .theme-chip {
+            flex: 1;
+            height: 40px;
+            border-radius: var(--md-shape-corner-medium);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            background: var(--md-sys-color-surface-container-low);
+            color: var(--md-sys-color-on-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .theme-chip:hover {
+            background: var(--md-sys-color-surface-container);
+        }
+
+        .theme-chip.active {
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-color: var(--md-sys-color-primary);
+        }
+
+        .theme-chip .material-symbols-rounded {
+            font-size: 18px;
         }
 
         .modal-actions {
@@ -760,7 +798,7 @@
         .color-palette-options {
             display: flex;
             gap: 12px;
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
         .color-dot {
@@ -801,13 +839,9 @@
             <span>Startune</span>
         </div>
         <div class="header-actions">
-            <!-- Dynamic Theme Toggle -->
-            <button class="icon-btn" id="themeToggleBtn" title="切换主题模式">
-                <span class="material-symbols-rounded" id="themeIcon">dark_mode</span>
-            </button>
             <!-- Settings Modal Button -->
-            <button class="icon-btn" id="settingsBtn" title="个性化配色">
-                <span class="material-symbols-rounded">palette</span>
+            <button class="icon-btn" id="settingsBtn" title="设置">
+                <span class="material-symbols-rounded">settings</span>
             </button>
         </div>
     </header>
@@ -882,15 +916,32 @@
         </div>
     </div>
 
-    <!-- Personalization Modal -->
+    <!-- Personalization & Settings Modal -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-card">
             <div class="modal-title">
-                <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">palette</span>
-                Material You 主题配色
+                <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">settings</span>
+                设置
             </div>
             <div class="form-group">
-                <label>选择 Accent 色彩</label>
+                <label>外观模式</label>
+                <div class="theme-options">
+                    <button class="theme-chip" data-theme-val="system">
+                        <span class="material-symbols-rounded">desktop_windows</span>
+                        <span>跟随系统</span>
+                    </button>
+                    <button class="theme-chip" data-theme-val="light">
+                        <span class="material-symbols-rounded">light_mode</span>
+                        <span>浅色</span>
+                    </button>
+                    <button class="theme-chip" data-theme-val="dark">
+                        <span class="material-symbols-rounded">dark_mode</span>
+                        <span>深色</span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>主题色彩</label>
                 <div class="color-palette-options">
                     <div class="color-dot active" style="background: #1a73e8;" data-color-val="google-blue" title="Google 蓝"></div>
                     <div class="color-dot" style="background: #0f9d58;" data-color-val="emerald-green" title="翡翠绿"></div>
@@ -1076,12 +1127,9 @@
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('startune_theme', theme);
 
-            const icon = document.getElementById('themeIcon');
-            if (theme === 'dark') {
-                icon.textContent = 'light_mode';
-            } else {
-                icon.textContent = 'dark_mode';
-            }
+            document.querySelectorAll('.theme-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.getAttribute('data-theme-val') === theme);
+            });
         }
 
         function applyColor(color) {
@@ -1094,9 +1142,10 @@
             });
         }
 
-        document.getElementById('themeToggleBtn').addEventListener('click', () => {
-            const nextTheme = (currentTheme === 'dark') ? 'light' : 'dark';
-            applyTheme(nextTheme);
+        document.querySelectorAll('.theme-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                applyTheme(chip.getAttribute('data-theme-val'));
+            });
         });
 
         document.querySelectorAll('.color-dot').forEach(dot => {
