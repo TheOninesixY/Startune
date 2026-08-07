@@ -366,8 +366,24 @@
             background: var(--md-sys-color-surface-container);
         }
 
-        .shortcut-card:active {
-            transform: scale(0.96);
+        .shortcut-card.dragging {
+            opacity: 0.4;
+            transform: scale(0.95);
+        }
+
+        .shortcut-card.touch-dragging {
+            opacity: 0.8;
+            position: fixed;
+            z-index: 3000;
+            pointer-events: none;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            transition: none;
+            background: var(--md-sys-color-surface-container-high);
+        }
+
+        .shortcut-card.drag-over {
+            border: 2px solid var(--md-sys-color-primary);
+            background: var(--md-sys-color-primary-container);
         }
 
         .shortcut-icon-wrapper {
@@ -1259,7 +1275,9 @@
             hideContextMenu();
         });
 
-        // --- Render Shortcuts ---
+        // --- Render Shortcuts with Drag and Drop ---
+        let draggedIndex = null;
+
         function renderShortcuts() {
             const container = document.getElementById('shortcutsContainer');
             container.innerHTML = '';
@@ -1269,6 +1287,8 @@
                 card.className = 'shortcut-card';
                 card.href = item.url;
                 card.target = shortcutTarget;
+                card.draggable = true;
+                card.setAttribute('data-index', index);
 
                 const faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(item.url).hostname}&sz=64`;
 
@@ -1282,17 +1302,129 @@
                     <div class="shortcut-title">${item.name}</div>
                 `;
 
+                // Drag & Drop Handlers (HTML5 Drag and Drop)
+                card.addEventListener('dragstart', (e) => {
+                    draggedIndex = index;
+                    card.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', index);
+                });
+
+                card.addEventListener('dragend', () => {
+                    card.classList.remove('dragging');
+                    document.querySelectorAll('.shortcut-card').forEach(c => c.classList.remove('drag-over'));
+                });
+
+                card.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    if (draggedIndex !== null && draggedIndex !== index) {
+                        card.classList.add('drag-over');
+                    }
+                });
+
+                card.addEventListener('dragleave', () => {
+                    card.classList.remove('drag-over');
+                });
+
+                card.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    card.classList.remove('drag-over');
+                    if (draggedIndex !== null && draggedIndex !== index) {
+                        // Reorder array
+                        const draggedItem = shortcuts.splice(draggedIndex, 1)[0];
+                        shortcuts.splice(index, 0, draggedItem);
+                        draggedIndex = null;
+                        saveShortcuts();
+                        renderShortcuts();
+                    }
+                });
+
+                // Context Menu
                 card.addEventListener('contextmenu', (e) => showContextMenu(e, index));
 
+                // Touch Long-Press Context Menu & Touch Drag & Drop
                 let pressTimer = null;
+                let touchDragClone = null;
+                let isTouchDragging = false;
+                let touchStartX = 0, touchStartY = 0;
+
                 card.addEventListener('touchstart', (e) => {
+                    const touch = e.touches[0];
+                    touchStartX = touch.clientX;
+                    touchStartY = touch.clientY;
+
                     pressTimer = setTimeout(() => {
+                        // Show context menu on long press
                         showContextMenu(e, index);
                     }, 500);
                 }, { passive: true });
 
-                card.addEventListener('touchend', () => clearTimeout(pressTimer));
-                card.addEventListener('touchmove', () => clearTimeout(pressTimer));
+                card.addEventListener('touchmove', (e) => {
+                    const touch = e.touches[0];
+                    const moveX = Math.abs(touch.clientX - touchStartX);
+                    const moveY = Math.abs(touch.clientY - touchStartY);
+
+                    // If user moves finger > 8px, cancel long press and start touch drag
+                    if (moveX > 8 || moveY > 8) {
+                        clearTimeout(pressTimer);
+
+                        if (!isTouchDragging) {
+                            isTouchDragging = true;
+                            draggedIndex = index;
+
+                            // Create floating ghost element
+                            touchDragClone = card.cloneNode(true);
+                            touchDragClone.classList.add('touch-dragging');
+                            touchDragClone.style.width = `${card.offsetWidth}px`;
+                            touchDragClone.style.height = `${card.offsetHeight}px`;
+                            document.body.appendChild(touchDragClone);
+
+                            card.classList.add('dragging');
+                        }
+
+                        if (touchDragClone) {
+                            touchDragClone.style.left = `${touch.clientX - card.offsetWidth / 2}px`;
+                            touchDragClone.style.top = `${touch.clientY - card.offsetHeight / 2}px`;
+                        }
+
+                        // Check element under finger
+                        const targetElem = document.elementFromPoint(touch.clientX, touch.clientY);
+                        const targetCard = targetElem ? targetElem.closest('.shortcut-card:not(.add-shortcut-card)') : null;
+
+                        document.querySelectorAll('.shortcut-card').forEach(c => c.classList.remove('drag-over'));
+                        if (targetCard && targetCard !== card) {
+                            targetCard.classList.add('drag-over');
+                        }
+                    }
+                }, { passive: true });
+
+                card.addEventListener('touchend', (e) => {
+                    clearTimeout(pressTimer);
+
+                    if (isTouchDragging) {
+                        const touch = e.changedTouches[0];
+                        const targetElem = document.elementFromPoint(touch.clientX, touch.clientY);
+                        const targetCard = targetElem ? targetElem.closest('.shortcut-card:not(.add-shortcut-card)') : null;
+
+                        if (targetCard) {
+                            const targetIndex = parseInt(targetCard.getAttribute('data-index'), 10);
+                            if (!isNaN(targetIndex) && draggedIndex !== null && draggedIndex !== targetIndex) {
+                                const draggedItem = shortcuts.splice(draggedIndex, 1)[0];
+                                shortcuts.splice(targetIndex, 0, draggedItem);
+                                saveShortcuts();
+                            }
+                        }
+
+                        if (touchDragClone && touchDragClone.parentNode) {
+                            touchDragClone.parentNode.removeChild(touchDragClone);
+                        }
+
+                        draggedIndex = null;
+                        isTouchDragging = false;
+                        renderShortcuts();
+                    }
+                });
 
                 container.appendChild(card);
             });
