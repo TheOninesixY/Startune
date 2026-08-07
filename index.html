@@ -49,6 +49,12 @@
             -webkit-user-select: none;
         }
 
+        html, body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+
         a, a * {
             text-decoration: none;
         }
@@ -63,11 +69,11 @@
             background-color: var(--md-sys-color-surface);
             color: var(--md-sys-color-on-surface);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            overflow-x: hidden;
             transition: background-color var(--transition-medium), color var(--transition-medium);
         }
 
@@ -89,7 +95,8 @@
         /* Header Navigation Bar */
         header {
             width: 100%;
-            padding: 16px 28px;
+            max-width: 100%;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -108,12 +115,17 @@
             padding: 8px 18px;
             border-radius: var(--md-shape-corner-full);
             transition: background var(--transition-medium);
+            max-width: calc(100% - 60px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .header-actions {
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-shrink: 0;
         }
 
         .icon-btn {
@@ -129,6 +141,7 @@
             cursor: pointer;
             transition: all var(--transition-fast);
             outline: none;
+            flex-shrink: 0;
         }
 
         .icon-btn:hover {
@@ -157,20 +170,22 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
 
         .digital-clock {
-            font-size: 68px;
+            font-size: clamp(48px, 12vw, 68px);
             font-weight: 700;
             letter-spacing: -1.5px;
             line-height: 1.1;
             color: var(--md-sys-color-on-surface);
             font-feature-settings: "tnum";
             font-variant-numeric: tabular-nums;
+            word-break: break-all;
         }
 
         .date-display {
-            font-size: 15px;
+            font-size: clamp(13px, 3.5vw, 15px);
             color: var(--md-sys-color-on-surface-variant);
             margin-top: 6px;
             font-weight: 500;
@@ -189,6 +204,13 @@
             font-weight: 500;
             transition: background-color var(--transition-medium), color var(--transition-medium);
             animation: fadeIn 0.6s ease-out;
+            max-width: 100%;
+        }
+
+        .greeting-badge span:last-child {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* Material You Search Bar (Tonal Surface Container) */
@@ -200,12 +222,12 @@
 
         .search-bar {
             width: 100%;
-            height: 60px;
+            min-height: 60px;
             background: var(--md-sys-color-surface-container-low);
             border-radius: var(--md-shape-corner-full);
             display: flex;
             align-items: center;
-            padding: 0 8px 0 18px;
+            padding: 0 8px 0 16px;
             transition: all var(--transition-medium);
             border: 1px solid var(--md-sys-color-outline-variant);
         }
@@ -219,14 +241,15 @@
             display: flex;
             align-items: center;
             gap: 2px;
-            padding: 6px 12px;
+            padding: 6px 10px;
             border-radius: var(--md-shape-corner-full);
             background: var(--md-sys-color-surface-container);
             color: var(--md-sys-color-on-surface);
             cursor: pointer;
             font-size: 14px;
             font-weight: 500;
-            margin-right: 10px;
+            margin-right: 8px;
+            flex-shrink: 0;
             transition: background var(--transition-fast), color var(--transition-fast);
         }
 
@@ -236,12 +259,13 @@
 
         .search-input {
             flex: 1;
+            min-width: 0;
             height: 100%;
             border: none;
             background: transparent;
             outline: none;
             font-family: inherit;
-            font-size: 17px;
+            font-size: 16px;
             color: var(--md-sys-color-on-surface);
             user-select: text;
             -webkit-user-select: text;
@@ -255,6 +279,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            flex-shrink: 0;
         }
 
         .search-btn {
@@ -268,6 +293,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            flex-shrink: 0;
             transition: opacity var(--transition-fast), background-color var(--transition-medium);
         }
 
@@ -279,7 +305,7 @@
         .engine-menu {
             position: absolute;
             top: 68px;
-            left: 12px;
+            left: 0;
             background: var(--md-sys-color-surface-container-lowest);
             border: 1px solid var(--md-sys-color-outline-variant);
             border-radius: var(--md-shape-corner-large);
@@ -313,18 +339,12 @@
             color: var(--md-sys-color-on-primary-container);
         }
 
-        /* Shortcuts Section (Subtly Tinted Flat Cards) */
+        /* Shortcuts Section (Fluid Grid Layout) */
         .shortcuts-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 16px;
             width: 100%;
-        }
-
-        @media (max-width: 600px) {
-            .shortcuts-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
         }
 
         .shortcut-card {
@@ -339,6 +359,7 @@
             color: var(--md-sys-color-on-surface);
             transition: background var(--transition-fast), transform var(--transition-fast);
             position: relative;
+            min-width: 0;
         }
 
         .shortcut-card:hover {
@@ -346,35 +367,36 @@
         }
 
         .shortcut-card:active {
-            transform: scale(0.97);
+            transform: scale(0.96);
         }
 
         .shortcut-icon-wrapper {
-            width: 44px;
-            height: 44px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: transparent;
+            flex-shrink: 0;
         }
 
         .shortcut-icon-wrapper img {
-            width: 44px;
-            height: 44px;
+            width: 32px;
+            height: 32px;
             object-fit: contain;
-            border-radius: var(--md-shape-corner-medium);
+            border-radius: var(--md-shape-corner-small);
         }
 
         .shortcut-icon-fallback {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--md-shape-corner-medium);
+            width: 32px;
+            height: 32px;
+            border-radius: var(--md-shape-corner-small);
             background: var(--md-sys-color-primary-container);
             color: var(--md-sys-color-on-primary-container);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
         }
 
         .shortcut-title {
@@ -385,7 +407,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             width: 100%;
-            padding: 0 4px;
+            padding: 0 2px;
         }
 
         .add-shortcut-card {
@@ -450,7 +472,7 @@
 
         /* Footer Empty Spacer */
         footer {
-            height: 40px;
+            height: 32px;
         }
 
         /* Material You Tinted Modal Dialog */
@@ -460,13 +482,15 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.15);
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(2px);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             opacity: 0;
+            padding: 16px;
             transition: opacity var(--transition-fast);
         }
 
@@ -479,12 +503,14 @@
             background: var(--md-sys-color-surface-container-lowest);
             border: 1px solid var(--md-sys-color-outline-variant);
             color: var(--md-sys-color-on-surface);
-            width: 90%;
+            width: 100%;
             max-width: 400px;
             border-radius: var(--md-shape-corner-extra-large);
-            padding: 28px;
+            padding: 24px;
             transform: scale(0.95);
             transition: transform var(--transition-fast), background-color var(--transition-medium);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-overlay.active .modal-card {
@@ -532,15 +558,17 @@
             border-width: 2px;
         }
 
-        /* Segmented Buttons for Theme Selector */
+        /* Segmented Buttons for Theme & Target Selectors */
         .theme-options {
             display: flex;
             gap: 8px;
             margin-top: 4px;
+            width: 100%;
         }
 
-        .theme-chip {
+        .theme-chip, .target-chip {
             flex: 1;
+            min-width: 0;
             height: 40px;
             border-radius: var(--md-shape-corner-medium);
             border: 1px solid var(--md-sys-color-outline-variant);
@@ -554,20 +582,28 @@
             font-weight: 500;
             cursor: pointer;
             transition: all var(--transition-fast);
+            padding: 0 6px;
         }
 
-        .theme-chip:hover {
+        .theme-chip span:last-child, .target-chip span:last-child {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .theme-chip:hover, .target-chip:hover {
             background: var(--md-sys-color-surface-container);
         }
 
-        .theme-chip.active {
+        .theme-chip.active, .target-chip.active {
             background: var(--md-sys-color-primary-container);
             color: var(--md-sys-color-on-primary-container);
             border-color: var(--md-sys-color-primary);
         }
 
-        .theme-chip .material-symbols-rounded {
+        .theme-chip .material-symbols-rounded, .target-chip .material-symbols-rounded {
             font-size: 18px;
+            flex-shrink: 0;
         }
 
         /* Custom Color Picker Options */
@@ -576,17 +612,20 @@
             align-items: center;
             gap: 10px;
             margin-top: 6px;
+            width: 100%;
+            flex-wrap: wrap;
         }
 
         .color-palette-options {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .color-dot {
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid transparent;
@@ -604,8 +643,8 @@
 
         .custom-color-wrapper {
             position: relative;
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             overflow: hidden;
             display: flex;
@@ -615,6 +654,7 @@
             border: 1px solid var(--md-sys-color-outline-variant);
             cursor: pointer;
             transition: transform var(--transition-fast);
+            flex-shrink: 0;
         }
 
         .custom-color-wrapper:hover {
@@ -642,6 +682,7 @@
             padding: 0 10px;
             height: 34px;
             flex: 1;
+            min-width: 100px;
         }
 
         .hex-input-prefix {
@@ -699,6 +740,76 @@
 
         .btn-filled:hover {
             opacity: 0.9;
+        }
+
+        /* Mobile Breakpoints (< 480px) */
+        @media (max-width: 480px) {
+            header {
+                padding: 12px 16px;
+            }
+
+            main {
+                margin-top: 0;
+                padding: 0 12px;
+            }
+
+            .time-greeting-container {
+                margin-bottom: 20px;
+            }
+
+            .search-container {
+                margin-bottom: 24px;
+            }
+
+            .search-bar {
+                height: 52px;
+                min-height: 52px;
+                padding: 0 6px 0 12px;
+            }
+
+            .engine-selector {
+                padding: 4px 8px;
+                font-size: 13px;
+                margin-right: 4px;
+            }
+
+            .search-input {
+                font-size: 15px;
+            }
+
+            .search-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .shortcuts-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+
+            .shortcut-card {
+                padding: 12px 4px;
+                border-radius: 20px;
+            }
+
+            .shortcut-icon-wrapper,
+            .shortcut-icon-wrapper img,
+            .shortcut-icon-fallback {
+                width: 36px;
+                height: 36px;
+            }
+
+            .shortcut-title {
+                font-size: 11px;
+            }
+
+            .modal-card {
+                padding: 18px;
+            }
+
+            .hex-input-wrapper {
+                width: 100%;
+            }
         }
 
         /* Keyframes */
@@ -836,6 +947,32 @@
                 </div>
             </div>
             <div class="form-group">
+                <label>搜索跳转目标</label>
+                <div class="theme-options">
+                    <button class="target-chip" data-target-type="search" data-target-val="_blank">
+                        <span class="material-symbols-rounded">open_in_new</span>
+                        <span>新标签页</span>
+                    </button>
+                    <button class="target-chip" data-target-type="search" data-target-val="_self">
+                        <span class="material-symbols-rounded">open_in_browser</span>
+                        <span>当前标签页</span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>快捷方式跳转目标</label>
+                <div class="theme-options">
+                    <button class="target-chip" data-target-type="shortcut" data-target-val="_blank">
+                        <span class="material-symbols-rounded">open_in_new</span>
+                        <span>新标签页</span>
+                    </button>
+                    <button class="target-chip" data-target-type="shortcut" data-target-val="_self">
+                        <span class="material-symbols-rounded">open_in_browser</span>
+                        <span>当前标签页</span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
                 <label>主题主色 (Accent Seed Color)</label>
                 <div class="color-palette-container">
                     <div class="color-palette-options">
@@ -873,6 +1010,8 @@
         let shortcuts = JSON.parse(localStorage.getItem('startune_shortcuts')) || defaultShortcuts;
         let currentTheme = localStorage.getItem('startune_theme') || 'system';
         let currentSeedColor = localStorage.getItem('startune_seed_color') || '#1a73e8';
+        let searchTarget = localStorage.getItem('startune_search_target') || '_blank';
+        let shortcutTarget = localStorage.getItem('startune_shortcut_target') || '_blank';
         let editingShortcutIndex = -1; // -1 means adding new
         let activeShortcutIndex = -1;  // index selected for context menu
 
@@ -902,12 +1041,6 @@
             return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
         }
 
-        function isDarkEffective() {
-            if (currentTheme === 'dark') return true;
-            if (currentTheme === 'light') return false;
-            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        }
-
         function hslToHex(h, s, l) {
             l /= 100;
             const a = s * Math.min(l, 1 - l) / 100;
@@ -927,6 +1060,12 @@
                 return hslToHex(h, s, l);
             }
             return hex;
+        }
+
+        function isDarkEffective() {
+            if (currentTheme === 'dark') return true;
+            if (currentTheme === 'light') return false;
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         }
 
         function generateMaterialTheme(seedHex) {
@@ -983,7 +1122,28 @@
             });
         }
 
-        // --- Apply Theme & Color ---
+        // --- Apply Theme & Color & Target ---
+        function applySearchTarget(target) {
+            searchTarget = target;
+            localStorage.setItem('startune_search_target', target);
+            document.getElementById('searchForm').target = target;
+
+            document.querySelectorAll('.target-chip[data-target-type="search"]').forEach(chip => {
+                chip.classList.toggle('active', chip.getAttribute('data-target-val') === target);
+            });
+        }
+
+        function applyShortcutTarget(target) {
+            shortcutTarget = target;
+            localStorage.setItem('startune_shortcut_target', target);
+
+            document.querySelectorAll('.target-chip[data-target-type="shortcut"]').forEach(chip => {
+                chip.classList.toggle('active', chip.getAttribute('data-target-val') === target);
+            });
+
+            renderShortcuts();
+        }
+
         function applyColor(seedHex) {
             currentSeedColor = seedHex;
             localStorage.setItem('startune_seed_color', seedHex);
@@ -1056,9 +1216,23 @@
             e.stopPropagation();
             activeShortcutIndex = index;
 
-            // Position context menu
-            contextMenu.style.left = `${e.clientX || e.touches[0].clientX}px`;
-            contextMenu.style.top = `${e.clientY || e.touches[0].clientY}px`;
+            const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
+            const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
+
+            const menuWidth = 150;
+            const menuHeight = 100;
+            let left = clientX;
+            let top = clientY;
+
+            if (left + menuWidth > window.innerWidth) {
+                left = window.innerWidth - menuWidth - 12;
+            }
+            if (top + menuHeight > window.innerHeight) {
+                top = window.innerHeight - menuHeight - 12;
+            }
+
+            contextMenu.style.left = `${Math.max(12, left)}px`;
+            contextMenu.style.top = `${Math.max(12, top)}px`;
             contextMenu.classList.add('active');
         }
 
@@ -1094,7 +1268,7 @@
                 const card = document.createElement('a');
                 card.className = 'shortcut-card';
                 card.href = item.url;
-                card.target = '_blank';
+                card.target = shortcutTarget;
 
                 const faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(item.url).hostname}&sz=64`;
 
@@ -1108,10 +1282,8 @@
                     <div class="shortcut-title">${item.name}</div>
                 `;
 
-                // Right click event
                 card.addEventListener('contextmenu', (e) => showContextMenu(e, index));
 
-                // Long press event for mobile/touch
                 let pressTimer = null;
                 card.addEventListener('touchstart', (e) => {
                     pressTimer = setTimeout(() => {
@@ -1125,7 +1297,6 @@
                 container.appendChild(card);
             });
 
-            // Add button card
             const addCard = document.createElement('div');
             addCard.className = 'shortcut-card add-shortcut-card';
             addCard.id = 'addShortcutCard';
@@ -1231,7 +1402,19 @@
             });
         });
 
-        // --- Event Listeners for Theme & Colors ---
+        // --- Event Listeners for Theme & Colors & Targets ---
+        document.querySelectorAll('.target-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const targetType = chip.getAttribute('data-target-type');
+                const targetVal = chip.getAttribute('data-target-val');
+                if (targetType === 'search') {
+                    applySearchTarget(targetVal);
+                } else if (targetType === 'shortcut') {
+                    applyShortcutTarget(targetVal);
+                }
+            });
+        });
+
         document.querySelectorAll('.theme-chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 applyTheme(chip.getAttribute('data-theme-val'));
@@ -1262,9 +1445,11 @@
         document.getElementById('settingsBtn').addEventListener('click', () => openModal('settingsModal'));
         document.getElementById('closeSettingsBtn').addEventListener('click', () => closeModal('settingsModal'));
 
-        // Initialize Theme & Color Algorithm
+        // Initialize Theme & Color Algorithm & Target
         applyTheme(currentTheme);
         applyColor(currentSeedColor);
+        applySearchTarget(searchTarget);
+        applyShortcutTarget(shortcutTarget);
 
         // Modal Helpers
         function openModal(id) {
