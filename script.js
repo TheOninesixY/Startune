@@ -1,3 +1,29 @@
+// --- 域名与运行环境检测跳转 ---
+(function checkDomainRedirect() {
+    const targetHost = 'stune.onsy.qzz.io';
+    const { protocol, hostname, href } = window.location;
+
+    // 1. 直接 File:// 预览
+    if (protocol === 'file:') return;
+
+    // 2. 本地回环域名及常见局域网后缀 (.local, .lan)
+    if (
+        hostname === 'localhost' ||
+        hostname === '::1' ||
+        hostname.endsWith('.local') ||
+        hostname.endsWith('.lan')
+    ) return;
+
+    // 3. 内网 / 回环 IP 正则判定 (127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16)
+    const privateIpRegex = /^(127\.\d+\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+)$/;
+    if (privateIpRegex.test(hostname)) return;
+
+    // 4. 若非目标域名则保持路径跳转至 stune.onsy.qzz.io
+    if (hostname !== targetHost) {
+        window.location.replace(href.replace(location.host, targetHost));
+    }
+})();
+
 // --- i18n Translations Dictionary ---
 const i18n = {
     zh: {
