@@ -70,24 +70,31 @@ body {
     transition: background-color var(--transition-medium), color var(--transition-medium);
 }
 
-/* Fullscreen Overlay */
-#page-overlay {
+/* 全屏同色覆盖块样式 */
+#app-cover {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    height: 100dvh;
     background-color: var(--md-sys-color-surface);
     z-index: 99999;
-    pointer-events: all;
-    opacity: 1;
-    transition: opacity 0.3s ease;
+    pointer-events: none;
+    animation: coverFadeOut 0.5s cubic-bezier(0.2, 0, 0, 1) forwards;
 }
 
-#page-overlay.fade-out {
-    opacity: 0;
-    pointer-events: none;
+@keyframes coverFadeOut {
+    0% {
+        opacity: 1;
+    }
+    20% {
+        /* 显示 0.1s (0.5s * 20% = 0.1s) */
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
 }
 
 .material-symbols-rounded {
