@@ -351,12 +351,14 @@ function applyGreeting(visible) {
     }
 }
 
-function applyColor(seedHex) {
+function applyColor(seedHex, updateHexInput = true) {
     currentSeedColor = seedHex;
     localStorage.setItem('startune_seed_color', seedHex);
 
     document.getElementById('customColorPicker').value = seedHex;
-    document.getElementById('hexInput').value = seedHex.replace('#', '').toUpperCase();
+    if (updateHexInput) {
+        document.getElementById('hexInput').value = seedHex.replace('#', '').toUpperCase();
+    }
 
     document.querySelectorAll('.color-dot').forEach(dot => {
         const val = dot.getAttribute('data-color-val').toLowerCase();
@@ -812,10 +814,25 @@ customColorPicker.addEventListener('input', (e) => {
 });
 
 hexInput.addEventListener('input', (e) => {
-    let val = e.target.value.trim().replace(/^#/, '');
-    if (val.length === 6 && /^[0-9A-Fa-f]{6}$/.test(val)) {
-        applyColor('#' + val);
+    let rawVal = e.target.value.trim();
+    let val = rawVal.replace(/^#/, '');
+
+    // 支持 3 位缩写颜色码 (如 f00 -> ff0000) 或 6 位颜色码
+    let fullHex = '';
+    if (/^[0-9A-Fa-f]{3}$/.test(val)) {
+        fullHex = val.split('').map(c => c + c).join('');
+    } else if (/^[0-9A-Fa-f]{6}$/.test(val)) {
+        fullHex = val;
     }
+
+    if (fullHex) {
+        applyColor('#' + fullHex, false);
+    }
+});
+
+hexInput.addEventListener('blur', () => {
+    // 失去焦点时规范化格式（自动补齐 # 和大写，或者还原为有效颜色）
+    hexInput.value = currentSeedColor.replace('#', '').toUpperCase();
 });
 
 // Settings Modal Handlers

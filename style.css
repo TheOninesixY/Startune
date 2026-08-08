@@ -871,7 +871,7 @@ main {
     width: 100%;
     border: none;
     background: transparent;
-    font-family: monospace;
+    font-family: 'Google Sans', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
     font-size: 13px;
     font-weight: 500;
     color: var(--md-sys-color-on-surface);
