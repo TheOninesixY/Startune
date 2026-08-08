@@ -4,8 +4,6 @@
 
 界面优雅通透、色彩柔和，原生支持深色模式与多款 Dynamic Accent 配色方案，所有数据均保存在本地，零依赖且保护隐私。
 
-![Startune Preview](index.html) *(直接双击 `index.html` 即可运行)*
-
 ---
 
 ## ✨ 功能特性
