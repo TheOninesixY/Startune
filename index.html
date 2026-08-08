@@ -531,6 +531,12 @@
             transition: transform var(--transition-fast), background-color var(--transition-medium);
             max-height: 90vh;
             overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .modal-card::-webkit-scrollbar {
+            display: none;
         }
 
         .modal-overlay.active .modal-card {
