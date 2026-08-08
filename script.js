@@ -39,7 +39,8 @@ const i18n = {
         greetingMorning: '早上好，愿今天充满活力！',
         greetingAfternoon: '下午好，保持高效专注！',
         greetingEvening: '晚上好，享受悠闲时光！',
-        dateLocale: 'zh-CN'
+        dateLocale: 'zh-CN',
+        toastCopied: '已复制'
     },
     en: {
         settingsBtnTitle: 'Settings',
@@ -80,7 +81,8 @@ const i18n = {
         greetingMorning: 'Good morning! Have a productive day.',
         greetingAfternoon: 'Good afternoon! Keep up the great work.',
         greetingEvening: 'Good evening! Time to relax and unwind.',
-        dateLocale: 'en-US'
+        dateLocale: 'en-US',
+        toastCopied: 'Copied'
     }
 };
 
@@ -597,6 +599,39 @@ function saveShortcuts() {
 }
 
 renderShortcuts();
+
+// --- Copy Link & Toast Notification ---
+const copyLinkBtn = document.getElementById('copyLinkBtn');
+const toast = document.getElementById('toast');
+let toastTimer = null;
+
+function showToast(message) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+    }, 2000);
+}
+
+if (copyLinkBtn) {
+    copyLinkBtn.addEventListener('click', () => {
+        const textToCopy = 'stune.onsy.qzz.io';
+        const t = i18n[currentLang] || i18n.zh;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showToast(t.toastCopied || '已复制');
+        }).catch(() => {
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast(t.toastCopied || '已复制');
+        });
+    });
+}
 
 // --- Add/Edit Shortcut Modal Handlers ---
 function openAddShortcutModal() {
