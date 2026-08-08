@@ -35,22 +35,6 @@
 
 ---
 
-## 🚀 使用方法
-
-### 方法一：本地直接打开
-1. 克隆或下载本项目：
-   ```bash
-   git clone https://github.com/OninesixY/Startune.git
-   ```
-2. 在浏览器中直接双击 `index.html` 打开。
-
-### 方法二：设为浏览器起始页 / 新标签页
-1. 打开浏览器的 **设置** -> **启动时**（或 **新标签页** 设置）。
-2. 选择 **打开特定网页或一组网页**，添加 `index.html` 的本地绝对路径或部署后的网址。
-3. *（推荐）* 你也可以搭配 Chrome/Edge 的扩展程序（如 **Custom New Tab URL**）将 `index.html` 设为默认新标签页。
-
----
-
 ## 🛠️ 技术栈
 
 * **HTML5** & **原生 CSS3**（CSS Variables, Flexbox, CSS Grid）
