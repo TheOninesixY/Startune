@@ -1,4 +1,5 @@
 # Startune
+![Stars](https://img.shields.io/github/stars/TheOninesixY/Startune)
 
 **Startune** 是一款采用 Google Material You (Material Design 3) 设计风格的轻量级、无依赖、高颜值的浏览器起始页/新标签页。
 
