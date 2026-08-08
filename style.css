@@ -632,10 +632,78 @@ main {
     margin-bottom: 18px;
 }
 
+.form-group.row-switch {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
 .form-group label {
     font-size: 12px;
     font-weight: 500;
     color: var(--md-sys-color-primary);
+    font-family: inherit;
+}
+
+.form-group.row-switch label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--md-sys-color-primary);
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* Material Design 3 Switch Component */
+.md-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 32px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.md-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.md-switch-track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--md-sys-color-surface-container-highest);
+    border: 2px solid var(--md-sys-color-outline);
+    border-radius: var(--md-shape-corner-full);
+    transition: all var(--transition-medium);
+}
+
+.md-switch-thumb {
+    position: absolute;
+    top: 50%;
+    left: 6px;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--md-sys-color-outline);
+    transition: all var(--transition-medium);
+}
+
+.md-switch input:checked + .md-switch-track {
+    background-color: var(--md-sys-color-primary);
+    border-color: var(--md-sys-color-primary);
+}
+
+.md-switch input:checked + .md-switch-track .md-switch-thumb {
+    left: 24px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--md-sys-color-on-primary);
 }
 
 .form-input {
@@ -673,7 +741,7 @@ main {
     width: 100%;
 }
 
-.theme-chip, .target-chip, .engine-chip, .lang-chip, .greeting-chip {
+.theme-chip, .target-chip, .engine-chip, .lang-chip {
     font-family: inherit;
     flex: 1;
     min-width: 0;
@@ -693,23 +761,23 @@ main {
     padding: 0 6px;
 }
 
-.theme-chip span:last-child, .target-chip span:last-child, .engine-chip span:last-child, .lang-chip span:last-child, .greeting-chip span:last-child {
+.theme-chip span:last-child, .target-chip span:last-child, .engine-chip span:last-child, .lang-chip span:last-child {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.theme-chip:hover, .target-chip:hover, .engine-chip:hover, .lang-chip:hover, .greeting-chip:hover {
+.theme-chip:hover, .target-chip:hover, .engine-chip:hover, .lang-chip:hover {
     background: var(--md-sys-color-surface-container);
 }
 
-.theme-chip.active, .target-chip.active, .engine-chip.active, .lang-chip.active, .greeting-chip.active {
+.theme-chip.active, .target-chip.active, .engine-chip.active, .lang-chip.active {
     background: var(--md-sys-color-primary-container);
     color: var(--md-sys-color-on-primary-container);
     border-color: var(--md-sys-color-primary);
 }
 
-.theme-chip .material-symbols-rounded, .target-chip .material-symbols-rounded, .engine-chip .material-symbols-rounded, .lang-chip .material-symbols-rounded, .greeting-chip .material-symbols-rounded {
+.theme-chip .material-symbols-rounded, .target-chip .material-symbols-rounded, .engine-chip .material-symbols-rounded, .lang-chip .material-symbols-rounded {
     font-size: 18px;
     flex-shrink: 0;
 }

@@ -206,18 +206,14 @@
                     </button>
                 </div>
             </div>
-            <div class="form-group">
-                <label data-i18n-text="labelGreeting">问候语</label>
-                <div class="theme-options">
-                    <button class="greeting-chip" data-greeting-val="show">
-                        <span class="material-symbols-rounded">visibility</span>
-                        <span data-i18n-text="greetingShow">显示</span>
-                    </button>
-                    <button class="greeting-chip" data-greeting-val="hide">
-                        <span class="material-symbols-rounded">visibility_off</span>
-                        <span data-i18n-text="greetingHide">隐藏</span>
-                    </button>
-                </div>
+            <div class="form-group row-switch">
+                <label for="greetingToggle" data-i18n-text="labelGreeting">显示问候语</label>
+                <label class="md-switch">
+                    <input type="checkbox" id="greetingToggle" checked>
+                    <span class="md-switch-track">
+                        <span class="md-switch-thumb"></span>
+                    </span>
+                </label>
             </div>
             <div class="form-group">
                 <label data-i18n-text="labelAccentColor">主题主色 (Accent Seed Color)</label>

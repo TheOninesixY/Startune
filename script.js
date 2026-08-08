@@ -51,9 +51,7 @@ const i18n = {
         labelDefaultEngine: '默认搜索引擎',
         labelSearchTarget: '搜索跳转目标',
         labelShortcutTarget: '快捷方式跳转目标',
-        labelGreeting: '问候语',
-        greetingShow: '显示',
-        greetingHide: '隐藏',
+        labelGreeting: '显示问候语',
         targetNewTab: '新标签页',
         targetCurrentTab: '当前标签页',
         labelAccentColor: '主题主色 (Accent Seed Color)',
@@ -96,9 +94,7 @@ const i18n = {
         labelDefaultEngine: 'Default search engine',
         labelSearchTarget: 'Search link target',
         labelShortcutTarget: 'Shortcut link target',
-        labelGreeting: 'Greeting',
-        greetingShow: 'Show',
-        greetingHide: 'Hide',
+        labelGreeting: 'Show Greeting',
         targetNewTab: 'New tab',
         targetCurrentTab: 'Current tab',
         labelAccentColor: 'Accent Color (Seed Color)',
@@ -349,9 +345,10 @@ function applyGreeting(visible) {
         greetingBadge.style.display = visible ? 'inline-flex' : 'none';
     }
 
-    document.querySelectorAll('.greeting-chip').forEach(chip => {
-        chip.classList.toggle('active', (chip.getAttribute('data-greeting-val') === 'show') === visible);
-    });
+    const greetingToggle = document.getElementById('greetingToggle');
+    if (greetingToggle) {
+        greetingToggle.checked = visible;
+    }
 }
 
 function applyColor(seedHex) {
@@ -788,12 +785,12 @@ document.querySelectorAll('.target-chip').forEach(chip => {
     });
 });
 
-document.querySelectorAll('.greeting-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-        const val = chip.getAttribute('data-greeting-val');
-        applyGreeting(val === 'show');
+const greetingToggle = document.getElementById('greetingToggle');
+if (greetingToggle) {
+    greetingToggle.addEventListener('change', (e) => {
+        applyGreeting(e.target.checked);
     });
-});
+}
 
 document.querySelectorAll('.theme-chip').forEach(chip => {
     chip.addEventListener('click', () => {
