@@ -64,6 +64,10 @@
             outline: none;
         }
 
+        button, input {
+            font-family: inherit;
+        }
+
         body {
             font-family: 'Google Sans', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
             background-color: var(--md-sys-color-surface);
@@ -574,7 +578,7 @@
             border-width: 2px;
         }
 
-        /* Segmented Buttons for Theme & Target Selectors */
+        /* Segmented Buttons for Theme, Engine & Target Selectors */
         .theme-options {
             display: flex;
             gap: 8px;
@@ -582,7 +586,16 @@
             width: 100%;
         }
 
-        .theme-chip, .target-chip {
+        .engine-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 4px;
+            width: 100%;
+        }
+
+        .theme-chip, .target-chip, .engine-chip {
+            font-family: inherit;
             flex: 1;
             min-width: 0;
             height: 40px;
@@ -601,23 +614,23 @@
             padding: 0 6px;
         }
 
-        .theme-chip span:last-child, .target-chip span:last-child {
+        .theme-chip span:last-child, .target-chip span:last-child, .engine-chip span:last-child {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .theme-chip:hover, .target-chip:hover {
+        .theme-chip:hover, .target-chip:hover, .engine-chip:hover {
             background: var(--md-sys-color-surface-container);
         }
 
-        .theme-chip.active, .target-chip.active {
+        .theme-chip.active, .target-chip.active, .engine-chip.active {
             background: var(--md-sys-color-primary-container);
             color: var(--md-sys-color-on-primary-container);
             border-color: var(--md-sys-color-primary);
         }
 
-        .theme-chip .material-symbols-rounded, .target-chip .material-symbols-rounded {
+        .theme-chip .material-symbols-rounded, .target-chip .material-symbols-rounded, .engine-chip .material-symbols-rounded {
             font-size: 18px;
             flex-shrink: 0;
         }
@@ -823,6 +836,10 @@
                 padding: 18px;
             }
 
+            .engine-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .hex-input-wrapper {
                 width: 100%;
             }
@@ -890,6 +907,7 @@
                 <div class="engine-item" data-engine="google" data-action="https://www.google.com/search" data-name="q">Google</div>
                 <div class="engine-item" data-engine="baidu" data-action="https://www.baidu.com/s" data-name="wd">百度</div>
                 <div class="engine-item" data-engine="bing" data-action="https://www.bing.com/search" data-name="q">Bing</div>
+                <div class="engine-item" data-engine="duckduckgo" data-action="https://duckduckgo.com/" data-name="q">DuckDuckGo</div>
                 <div class="engine-item" data-engine="bilibili" data-action="https://search.bilibili.com/all" data-name="keyword">哔哩哔哩</div>
                 <div class="engine-item" data-engine="github" data-action="https://github.com/search" data-name="q">GitHub</div>
             </div>
@@ -963,6 +981,29 @@
                 </div>
             </div>
             <div class="form-group">
+                <label>默认搜索引擎</label>
+                <div class="engine-options">
+                    <button class="engine-chip" data-engine-val="google">
+                        <span>Google</span>
+                    </button>
+                    <button class="engine-chip" data-engine-val="baidu">
+                        <span>百度</span>
+                    </button>
+                    <button class="engine-chip" data-engine-val="bing">
+                        <span>Bing</span>
+                    </button>
+                    <button class="engine-chip" data-engine-val="duckduckgo">
+                        <span>DuckDuckGo</span>
+                    </button>
+                    <button class="engine-chip" data-engine-val="bilibili">
+                        <span>哔哩哔哩</span>
+                    </button>
+                    <button class="engine-chip" data-engine-val="github">
+                        <span>GitHub</span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
                 <label>搜索跳转目标</label>
                 <div class="theme-options">
                     <button class="target-chip" data-target-type="search" data-target-val="_blank">
@@ -1022,10 +1063,22 @@
             { name: 'Gemini', url: 'https://gemini.google.com', icon: 'auto_awesome' }
         ];
 
+        // --- Search Engines Config ---
+        const searchEngines = {
+            google: { name: 'Google', action: 'https://www.google.com/search', param: 'q' },
+            baidu: { name: '百度', action: 'https://www.baidu.com/s', param: 'wd' },
+            bing: { name: 'Bing', action: 'https://www.bing.com/search', param: 'q' },
+            duckduckgo: { name: 'DuckDuckGo', action: 'https://duckduckgo.com/', param: 'q' },
+            bilibili: { name: '哔哩哔哩', action: 'https://search.bilibili.com/all', param: 'keyword' },
+            github: { name: 'GitHub', action: 'https://github.com/search', param: 'q' }
+        };
+
         // --- State Management ---
         let shortcuts = JSON.parse(localStorage.getItem('startune_shortcuts')) || defaultShortcuts;
         let currentTheme = localStorage.getItem('startune_theme') || 'system';
         let currentSeedColor = localStorage.getItem('startune_seed_color') || '#1a73e8';
+        let defaultEngine = localStorage.getItem('startune_default_engine') || 'google';
+        let currentEngine = defaultEngine;
         let searchTarget = localStorage.getItem('startune_search_target') || '_blank';
         let shortcutTarget = localStorage.getItem('startune_shortcut_target') || '_blank';
         let editingShortcutIndex = -1; // -1 means adding new
@@ -1138,7 +1191,27 @@
             });
         }
 
-        // --- Apply Theme & Color & Target ---
+        // --- Apply Theme & Color & Target & Engine ---
+        function setEngine(engineKey, isTemporary = false) {
+            const engine = searchEngines[engineKey] || searchEngines.google;
+            currentEngine = engineKey;
+
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+            searchForm.action = engine.action;
+            searchInput.name = engine.param;
+            document.getElementById('engineName').textContent = engine.name;
+
+            if (!isTemporary) {
+                defaultEngine = engineKey;
+                localStorage.setItem('startune_default_engine', engineKey);
+            }
+
+            document.querySelectorAll('.engine-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.getAttribute('data-engine-val') === defaultEngine);
+            });
+        }
+
         function applySearchTarget(target) {
             searchTarget = target;
             localStorage.setItem('startune_search_target', target);
@@ -1523,18 +1596,20 @@
 
         document.querySelectorAll('.engine-item').forEach(item => {
             item.addEventListener('click', () => {
-                const action = item.getAttribute('data-action');
-                const paramName = item.getAttribute('data-name');
-                const engineName = item.innerText.trim();
-
-                searchForm.action = action;
-                searchInput.name = paramName;
-                document.getElementById('engineName').textContent = engineName;
+                const engineKey = item.getAttribute('data-engine');
+                setEngine(engineKey, true); // 搜索框旁边切换：临时修改，不写入 localStorage
                 engineMenu.classList.remove('active');
             });
         });
 
-        // --- Event Listeners for Theme & Colors & Targets ---
+        // --- Event Listeners for Theme & Engine & Colors & Targets ---
+        document.querySelectorAll('.engine-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const engineKey = chip.getAttribute('data-engine-val');
+                setEngine(engineKey, false); // 设置面板修改：默认修改，写入 localStorage
+            });
+        });
+
         document.querySelectorAll('.target-chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 const targetType = chip.getAttribute('data-target-type');
@@ -1577,11 +1652,12 @@
         document.getElementById('settingsBtn').addEventListener('click', () => openModal('settingsModal'));
         document.getElementById('closeSettingsBtn').addEventListener('click', () => closeModal('settingsModal'));
 
-        // Initialize Theme & Color Algorithm & Target
+        // Initialize Theme & Color Algorithm & Target & Engine
         applyTheme(currentTheme);
         applyColor(currentSeedColor);
         applySearchTarget(searchTarget);
         applyShortcutTarget(shortcutTarget);
+        setEngine(defaultEngine, false);
 
         // Modal Helpers
         function openModal(id) {
