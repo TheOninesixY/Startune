@@ -638,7 +638,7 @@ function showToast(message) {
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
         toast.classList.remove('show');
-    }, 2000);
+    }, 0);
 }
 
 if (copyLinkBtn) {
@@ -804,6 +804,19 @@ applyColor(currentSeedColor);
 applySearchTarget(searchTarget);
 applyShortcutTarget(shortcutTarget);
 setEngine(defaultEngine, false);
+
+// --- Fullscreen Overlay Fade Out Logic ---
+window.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('page-overlay');
+    if (overlay) {
+        setTimeout(() => {
+            overlay.classList.add('fade-out');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 500);
+        }, 500);
+    }
+});
 
 // Modal Helpers
 function openModal(id) {

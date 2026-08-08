@@ -70,6 +70,26 @@ body {
     transition: background-color var(--transition-medium), color var(--transition-medium);
 }
 
+/* Fullscreen Overlay */
+#page-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background-color: var(--md-sys-color-surface);
+    z-index: 99999;
+    pointer-events: all;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+#page-overlay.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
 .material-symbols-rounded {
     font-family: 'Material Symbols Rounded';
     font-weight: normal;
