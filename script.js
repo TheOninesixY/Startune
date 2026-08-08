@@ -638,7 +638,7 @@ function showToast(message) {
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
         toast.classList.remove('show');
-    }, 0);
+    }, 100);
 }
 
 if (copyLinkBtn) {
