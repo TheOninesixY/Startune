@@ -585,7 +585,7 @@
         }
 
         /* Segmented Buttons for Theme, Engine & Target Selectors */
-        .theme-options {
+        .theme-options, .lang-options {
             display: flex;
             gap: 8px;
             margin-top: 4px;
@@ -600,7 +600,7 @@
             width: 100%;
         }
 
-        .theme-chip, .target-chip, .engine-chip {
+        .theme-chip, .target-chip, .engine-chip, .lang-chip {
             font-family: inherit;
             flex: 1;
             min-width: 0;
@@ -620,23 +620,23 @@
             padding: 0 6px;
         }
 
-        .theme-chip span:last-child, .target-chip span:last-child, .engine-chip span:last-child {
+        .theme-chip span:last-child, .target-chip span:last-child, .engine-chip span:last-child, .lang-chip span:last-child {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .theme-chip:hover, .target-chip:hover, .engine-chip:hover {
+        .theme-chip:hover, .target-chip:hover, .engine-chip:hover, .lang-chip:hover {
             background: var(--md-sys-color-surface-container);
         }
 
-        .theme-chip.active, .target-chip.active, .engine-chip.active {
+        .theme-chip.active, .target-chip.active, .engine-chip.active, .lang-chip.active {
             background: var(--md-sys-color-primary-container);
             color: var(--md-sys-color-on-primary-container);
             border-color: var(--md-sys-color-primary);
         }
 
-        .theme-chip .material-symbols-rounded, .target-chip .material-symbols-rounded, .engine-chip .material-symbols-rounded {
+        .theme-chip .material-symbols-rounded, .target-chip .material-symbols-rounded, .engine-chip .material-symbols-rounded, .lang-chip .material-symbols-rounded {
             font-size: 18px;
             flex-shrink: 0;
         }
@@ -873,7 +873,7 @@
         </div>
         <div class="header-actions">
             <!-- Settings Modal Button -->
-            <button class="icon-btn" id="settingsBtn" title="设置">
+            <button class="icon-btn" id="settingsBtn" data-i18n-title="settingsBtnTitle" title="设置">
                 <span class="material-symbols-rounded">settings</span>
             </button>
         </div>
@@ -899,9 +899,9 @@
                         <span id="engineName">Google</span>
                         <span class="material-symbols-rounded" style="font-size: 18px;">arrow_drop_down</span>
                     </div>
-                    <input type="text" name="q" class="search-input" id="searchInput" placeholder="搜索网络或输入网址..." autocomplete="off" autofocus>
+                    <input type="text" name="q" class="search-input" id="searchInput" data-i18n-placeholder="searchInputPlaceholder" placeholder="搜索网络或输入网址..." autocomplete="off" autofocus>
                     <div class="search-actions">
-                        <button type="submit" class="search-btn" title="开始搜索">
+                        <button type="submit" class="search-btn" id="searchSubmitBtn" data-i18n-title="searchBtnTitle" title="开始搜索">
                             <span class="material-symbols-rounded">search</span>
                         </button>
                     </div>
@@ -911,10 +911,10 @@
             <!-- Search Engine Dropdown -->
             <div class="engine-menu" id="engineMenu">
                 <div class="engine-item" data-engine="google" data-action="https://www.google.com/search" data-name="q">Google</div>
-                <div class="engine-item" data-engine="baidu" data-action="https://www.baidu.com/s" data-name="wd">百度</div>
+                <div class="engine-item" data-engine="baidu" data-action="https://www.baidu.com/s" data-name="wd" data-i18n-text="engineBaidu">百度</div>
                 <div class="engine-item" data-engine="bing" data-action="https://www.bing.com/search" data-name="q">Bing</div>
                 <div class="engine-item" data-engine="duckduckgo" data-action="https://duckduckgo.com/" data-name="q">DuckDuckGo</div>
-                <div class="engine-item" data-engine="bilibili" data-action="https://search.bilibili.com/all" data-name="keyword">哔哩哔哩</div>
+                <div class="engine-item" data-engine="bilibili" data-action="https://search.bilibili.com/all" data-name="keyword" data-i18n-text="engineBilibili">哔哩哔哩</div>
                 <div class="engine-item" data-engine="github" data-action="https://github.com/search" data-name="q">GitHub</div>
             </div>
         </div>
@@ -929,11 +929,11 @@
     <div class="context-menu" id="shortcutContextMenu">
         <div class="context-menu-item" id="ctxEdit">
             <span class="material-symbols-rounded" style="font-size: 18px;">edit</span>
-            <span>修改</span>
+            <span data-i18n-text="ctxEdit">修改</span>
         </div>
         <div class="context-menu-item danger" id="ctxDelete">
             <span class="material-symbols-rounded" style="font-size: 18px;">delete</span>
-            <span>删除</span>
+            <span data-i18n-text="ctxDelete">删除</span>
         </div>
     </div>
 
@@ -945,19 +945,19 @@
         <div class="modal-card">
             <div class="modal-title" id="shortcutModalTitle">
                 <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">add_link</span>
-                添加快捷方式
+                <span id="shortcutModalTitleText">添加快捷方式</span>
             </div>
             <div class="form-group">
-                <label for="siteName">名称</label>
-                <input type="text" id="siteName" class="form-input" placeholder="例如：GitHub">
+                <label for="siteName" data-i18n-text="labelShortcutName">名称</label>
+                <input type="text" id="siteName" class="form-input" data-i18n-placeholder="placeholderShortcutName" placeholder="例如：GitHub">
             </div>
             <div class="form-group">
-                <label for="siteUrl">网址 (URL)</label>
+                <label for="siteUrl" data-i18n-text="labelShortcutUrl">网址 (URL)</label>
                 <input type="url" id="siteUrl" class="form-input" placeholder="https://example.com">
             </div>
             <div class="modal-actions">
-                <button class="btn btn-text" id="cancelShortcutBtn">取消</button>
-                <button class="btn btn-filled" id="saveShortcutBtn">保存</button>
+                <button class="btn btn-text" id="cancelShortcutBtn" data-i18n-text="btnCancel">取消</button>
+                <button class="btn btn-filled" id="saveShortcutBtn" data-i18n-text="btnSave">保存</button>
             </div>
         </div>
     </div>
@@ -967,33 +967,46 @@
         <div class="modal-card">
             <div class="modal-title">
                 <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">settings</span>
-                设置
+                <span data-i18n-text="settingsTitle">设置</span>
             </div>
             <div class="form-group">
-                <label>外观模式</label>
-                <div class="theme-options">
-                    <button class="theme-chip" data-theme-val="system">
-                        <span class="material-symbols-rounded">desktop_windows</span>
-                        <span>跟随系统</span>
+                <label data-i18n-text="labelLanguage">语言 (Language)</label>
+                <div class="lang-options">
+                    <button class="lang-chip" data-lang-val="zh">
+                        <span class="material-symbols-rounded">translate</span>
+                        <span>简体中文</span>
                     </button>
-                    <button class="theme-chip" data-theme-val="light">
-                        <span class="material-symbols-rounded">light_mode</span>
-                        <span>浅色</span>
-                    </button>
-                    <button class="theme-chip" data-theme-val="dark">
-                        <span class="material-symbols-rounded">dark_mode</span>
-                        <span>深色</span>
+                    <button class="lang-chip" data-lang-val="en">
+                        <span class="material-symbols-rounded">language</span>
+                        <span>English</span>
                     </button>
                 </div>
             </div>
             <div class="form-group">
-                <label>默认搜索引擎</label>
+                <label data-i18n-text="labelTheme">外观模式</label>
+                <div class="theme-options">
+                    <button class="theme-chip" data-theme-val="system">
+                        <span class="material-symbols-rounded">desktop_windows</span>
+                        <span data-i18n-text="themeSystem">跟随系统</span>
+                    </button>
+                    <button class="theme-chip" data-theme-val="light">
+                        <span class="material-symbols-rounded">light_mode</span>
+                        <span data-i18n-text="themeLight">浅色</span>
+                    </button>
+                    <button class="theme-chip" data-theme-val="dark">
+                        <span class="material-symbols-rounded">dark_mode</span>
+                        <span data-i18n-text="themeDark">深色</span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label data-i18n-text="labelDefaultEngine">默认搜索引擎</label>
                 <div class="engine-options">
                     <button class="engine-chip" data-engine-val="google">
                         <span>Google</span>
                     </button>
                     <button class="engine-chip" data-engine-val="baidu">
-                        <span>百度</span>
+                        <span data-i18n-text="engineBaidu">百度</span>
                     </button>
                     <button class="engine-chip" data-engine-val="bing">
                         <span>Bing</span>
@@ -1002,7 +1015,7 @@
                         <span>DuckDuckGo</span>
                     </button>
                     <button class="engine-chip" data-engine-val="bilibili">
-                        <span>哔哩哔哩</span>
+                        <span data-i18n-text="engineBilibili">哔哩哔哩</span>
                     </button>
                     <button class="engine-chip" data-engine-val="github">
                         <span>GitHub</span>
@@ -1010,41 +1023,41 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>搜索跳转目标</label>
+                <label data-i18n-text="labelSearchTarget">搜索跳转目标</label>
                 <div class="theme-options">
                     <button class="target-chip" data-target-type="search" data-target-val="_blank">
                         <span class="material-symbols-rounded">open_in_new</span>
-                        <span>新标签页</span>
+                        <span data-i18n-text="targetNewTab">新标签页</span>
                     </button>
                     <button class="target-chip" data-target-type="search" data-target-val="_self">
                         <span class="material-symbols-rounded">open_in_browser</span>
-                        <span>当前标签页</span>
+                        <span data-i18n-text="targetCurrentTab">当前标签页</span>
                     </button>
                 </div>
             </div>
             <div class="form-group">
-                <label>快捷方式跳转目标</label>
+                <label data-i18n-text="labelShortcutTarget">快捷方式跳转目标</label>
                 <div class="theme-options">
                     <button class="target-chip" data-target-type="shortcut" data-target-val="_blank">
                         <span class="material-symbols-rounded">open_in_new</span>
-                        <span>新标签页</span>
+                        <span data-i18n-text="targetNewTab">新标签页</span>
                     </button>
                     <button class="target-chip" data-target-type="shortcut" data-target-val="_self">
                         <span class="material-symbols-rounded">open_in_browser</span>
-                        <span>当前标签页</span>
+                        <span data-i18n-text="targetCurrentTab">当前标签页</span>
                     </button>
                 </div>
             </div>
             <div class="form-group">
-                <label>主题主色 (Accent Seed Color)</label>
+                <label data-i18n-text="labelAccentColor">主题主色 (Accent Seed Color)</label>
                 <div class="color-palette-container">
                     <div class="color-palette-options">
-                        <div class="color-dot" style="background: #1a73e8;" data-color-val="#1a73e8" title="Google 蓝"></div>
-                        <div class="color-dot" style="background: #0f9d58;" data-color-val="#0f9d58" title="翡翠绿"></div>
-                        <div class="color-dot" style="background: #e37400;" data-color-val="#e37400" title="珊瑚橙"></div>
-                        <div class="color-dot" style="background: #a142f4;" data-color-val="#a142f4" title="薰衣紫"></div>
+                        <div class="color-dot" style="background: #1a73e8;" data-color-val="#1a73e8" data-i18n-title="colorGoogleBlue" title="Google 蓝"></div>
+                        <div class="color-dot" style="background: #0f9d58;" data-color-val="#0f9d58" data-i18n-title="colorEmeraldGreen" title="翡翠绿"></div>
+                        <div class="color-dot" style="background: #e37400;" data-color-val="#e37400" data-i18n-title="colorCoralOrange" title="珊瑚橙"></div>
+                        <div class="color-dot" style="background: #a142f4;" data-color-val="#a142f4" data-i18n-title="colorLavenderPurple" title="薰衣紫"></div>
                     </div>
-                    <div class="custom-color-wrapper" title="自定义调色盘">
+                    <div class="custom-color-wrapper" data-i18n-title="colorCustomPalette" title="自定义调色盘">
                         <span class="material-symbols-rounded" style="font-size: 20px; color: var(--md-sys-color-on-surface-variant);">colorize</span>
                         <input type="color" id="customColorPicker" class="custom-color-input" value="#1a73e8">
                     </div>
@@ -1055,12 +1068,98 @@
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn btn-filled" id="closeSettingsBtn">完成</button>
+                <button class="btn btn-filled" id="closeSettingsBtn" data-i18n-text="btnDone">完成</button>
             </div>
         </div>
     </div>
 
     <script>
+        // --- i18n Translations Dictionary ---
+        const i18n = {
+            zh: {
+                settingsBtnTitle: '设置',
+                searchInputPlaceholder: '搜索网络或输入网址...',
+                searchBtnTitle: '开始搜索',
+                engineBaidu: '百度',
+                engineBilibili: '哔哩哔哩',
+                ctxEdit: '修改',
+                ctxDelete: '删除',
+                addShortcutTitle: '添加快捷方式',
+                editShortcutTitle: '修改快捷方式',
+                addShortcutBtn: '添加快捷方式',
+                labelShortcutName: '名称',
+                placeholderShortcutName: '例如：GitHub',
+                labelShortcutUrl: '网址 (URL)',
+                btnCancel: '取消',
+                btnSave: '保存',
+                settingsTitle: '设置',
+                labelLanguage: '语言 (Language)',
+                labelTheme: '外观模式',
+                themeSystem: '跟随系统',
+                themeLight: '浅色',
+                themeDark: '深色',
+                labelDefaultEngine: '默认搜索引擎',
+                labelSearchTarget: '搜索跳转目标',
+                labelShortcutTarget: '快捷方式跳转目标',
+                targetNewTab: '新标签页',
+                targetCurrentTab: '当前标签页',
+                labelAccentColor: '主题主色 (Accent Seed Color)',
+                colorGoogleBlue: 'Google 蓝',
+                colorEmeraldGreen: '翡翠绿',
+                colorCoralOrange: '珊瑚橙',
+                colorLavenderPurple: '薰衣紫',
+                colorCustomPalette: '自定义调色盘',
+                btnDone: '完成',
+                alertFillFields: '请填写名称和网址',
+                greetingDefault: '你好，准备好开始新的一天了吗？',
+                greetingMorning: '早上好，愿今天充满活力！',
+                greetingAfternoon: '下午好，保持高效专注！',
+                greetingEvening: '晚上好，享受悠闲时光！',
+                dateLocale: 'zh-CN'
+            },
+            en: {
+                settingsBtnTitle: 'Settings',
+                searchInputPlaceholder: 'Search the web or type a URL...',
+                searchBtnTitle: 'Search',
+                engineBaidu: 'Baidu',
+                engineBilibili: 'Bilibili',
+                ctxEdit: 'Edit',
+                ctxDelete: 'Delete',
+                addShortcutTitle: 'Add shortcut',
+                editShortcutTitle: 'Edit shortcut',
+                addShortcutBtn: 'Add shortcut',
+                labelShortcutName: 'Name',
+                placeholderShortcutName: 'e.g. GitHub',
+                labelShortcutUrl: 'URL',
+                btnCancel: 'Cancel',
+                btnSave: 'Save',
+                settingsTitle: 'Settings',
+                labelLanguage: 'Language',
+                labelTheme: 'Theme',
+                themeSystem: 'System',
+                themeLight: 'Light',
+                themeDark: 'Dark',
+                labelDefaultEngine: 'Default search engine',
+                labelSearchTarget: 'Search link target',
+                labelShortcutTarget: 'Shortcut link target',
+                targetNewTab: 'New tab',
+                targetCurrentTab: 'Current tab',
+                labelAccentColor: 'Accent Color (Seed Color)',
+                colorGoogleBlue: 'Google Blue',
+                colorEmeraldGreen: 'Emerald Green',
+                colorCoralOrange: 'Coral Orange',
+                colorLavenderPurple: 'Lavender Purple',
+                colorCustomPalette: 'Custom Color Palette',
+                btnDone: 'Done',
+                alertFillFields: 'Please fill in both name and URL',
+                greetingDefault: 'Hello, ready to start a new day?',
+                greetingMorning: 'Good morning! Have a productive day.',
+                greetingAfternoon: 'Good afternoon! Keep up the great work.',
+                greetingEvening: 'Good evening! Time to relax and unwind.',
+                dateLocale: 'en-US'
+            }
+        };
+
         // --- Default Shortcuts Data ---
         const defaultShortcuts = [
             { name: 'Google', url: 'https://www.google.com', icon: 'g_mobiledata' },
@@ -1072,15 +1171,16 @@
         // --- Search Engines Config ---
         const searchEngines = {
             google: { name: 'Google', action: 'https://www.google.com/search', param: 'q' },
-            baidu: { name: '百度', action: 'https://www.baidu.com/s', param: 'wd' },
+            baidu: { name: '百度', nameEn: 'Baidu', action: 'https://www.baidu.com/s', param: 'wd' },
             bing: { name: 'Bing', action: 'https://www.bing.com/search', param: 'q' },
             duckduckgo: { name: 'DuckDuckGo', action: 'https://duckduckgo.com/', param: 'q' },
-            bilibili: { name: '哔哩哔哩', action: 'https://search.bilibili.com/all', param: 'keyword' },
+            bilibili: { name: '哔哩哔哩', nameEn: 'Bilibili', action: 'https://search.bilibili.com/all', param: 'keyword' },
             github: { name: 'GitHub', action: 'https://github.com/search', param: 'q' }
         };
 
         // --- State Management ---
         let shortcuts = JSON.parse(localStorage.getItem('startune_shortcuts')) || defaultShortcuts;
+        let currentLang = localStorage.getItem('startune_lang') || 'zh';
         let currentTheme = localStorage.getItem('startune_theme') || 'system';
         let currentSeedColor = localStorage.getItem('startune_seed_color') || '#1a73e8';
         let defaultEngine = localStorage.getItem('startune_default_engine') || 'google';
@@ -1089,6 +1189,46 @@
         let shortcutTarget = localStorage.getItem('startune_shortcut_target') || '_blank';
         let editingShortcutIndex = -1; // -1 means adding new
         let activeShortcutIndex = -1;  // index selected for context menu
+
+        // --- Language Switcher ---
+        function applyLanguage(lang) {
+            currentLang = i18n[lang] ? lang : 'zh';
+            localStorage.setItem('startune_lang', currentLang);
+            document.documentElement.setAttribute('lang', currentLang === 'zh' ? 'zh-CN' : 'en');
+
+            const t = i18n[currentLang];
+
+            // Text content
+            document.querySelectorAll('[data-i18n-text]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n-text');
+                if (t[key]) elem.textContent = t[key];
+            });
+
+            // Attributes
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n-placeholder');
+                if (t[key]) elem.placeholder = t[key];
+            });
+
+            document.querySelectorAll('[data-i18n-title]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n-title');
+                if (t[key]) elem.title = t[key];
+            });
+
+            // Update Language Chips
+            document.querySelectorAll('.lang-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.getAttribute('data-lang-val') === currentLang);
+            });
+
+            // Refresh Engine selector display name
+            setEngine(currentEngine, true);
+
+            // Refresh Clock & Greeting
+            updateClock();
+
+            // Refresh Shortcuts (Add Card text)
+            renderShortcuts();
+        }
 
         // --- Material You Dynamic Color Algorithm ---
         function hexToHsl(hex) {
@@ -1206,7 +1346,9 @@
             const searchInput = document.getElementById('searchInput');
             searchForm.action = engine.action;
             searchInput.name = engine.param;
-            document.getElementById('engineName').textContent = engine.name;
+            
+            const displayName = (currentLang === 'en' && engine.nameEn) ? engine.nameEn : engine.name;
+            document.getElementById('engineName').textContent = displayName;
 
             if (!isTemporary) {
                 defaultEngine = engineKey;
@@ -1279,20 +1421,21 @@
             const minutes = String(now.getMinutes()).padStart(2, '0');
             document.getElementById('clock').textContent = `${hours}:${minutes}`;
 
+            const t = i18n[currentLang] || i18n.zh;
             const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-            document.getElementById('date').textContent = now.toLocaleDateString('zh-CN', options);
+            document.getElementById('date').textContent = now.toLocaleDateString(t.dateLocale, options);
 
             const hour = now.getHours();
-            let greeting = '你好，准备好开始新的一天了吗？';
+            let greeting = t.greetingDefault;
             let icon = 'wb_sunny';
             if (hour >= 5 && hour < 12) {
-                greeting = '早上好，愿今天充满活力！';
+                greeting = t.greetingMorning;
                 icon = 'wb_sunny';
             } else if (hour >= 12 && hour < 18) {
-                greeting = '下午好，保持高效专注！';
+                greeting = t.greetingAfternoon;
                 icon = 'wb_twilight';
             } else {
-                greeting = '晚上好，享受悠闲时光！';
+                greeting = t.greetingEvening;
                 icon = 'bedtime';
             }
             const greetingBadge = document.getElementById('greetingText');
@@ -1360,6 +1503,8 @@
         function renderShortcuts() {
             const container = document.getElementById('shortcutsContainer');
             container.innerHTML = '';
+
+            const t = i18n[currentLang] || i18n.zh;
 
             shortcuts.forEach((item, index) => {
                 const card = document.createElement('a');
@@ -1517,7 +1662,7 @@
                         <span class="material-symbols-rounded" style="font-size: 32px;">add</span>
                     </div>
                 </div>
-                <div class="shortcut-title" style="color: var(--md-sys-color-primary);">添加快捷方式</div>
+                <div class="shortcut-title" style="color: var(--md-sys-color-primary);">${t.addShortcutBtn}</div>
             `;
             addCard.addEventListener('click', openAddShortcutModal);
             container.appendChild(addCard);
@@ -1532,9 +1677,10 @@
         // --- Add/Edit Shortcut Modal Handlers ---
         function openAddShortcutModal() {
             editingShortcutIndex = -1;
+            const t = i18n[currentLang] || i18n.zh;
             document.getElementById('shortcutModalTitle').innerHTML = `
                 <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">add_link</span>
-                添加快捷方式
+                <span>${t.addShortcutTitle}</span>
             `;
             document.getElementById('siteName').value = '';
             document.getElementById('siteUrl').value = '';
@@ -1544,9 +1690,10 @@
         function openEditShortcutModal(index) {
             editingShortcutIndex = index;
             const item = shortcuts[index];
+            const t = i18n[currentLang] || i18n.zh;
             document.getElementById('shortcutModalTitle').innerHTML = `
                 <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">edit</span>
-                修改快捷方式
+                <span>${t.editShortcutTitle}</span>
             `;
             document.getElementById('siteName').value = item.name;
             document.getElementById('siteUrl').value = item.url;
@@ -1556,9 +1703,10 @@
         document.getElementById('saveShortcutBtn').addEventListener('click', () => {
             const name = document.getElementById('siteName').value.trim();
             let url = document.getElementById('siteUrl').value.trim();
+            const t = i18n[currentLang] || i18n.zh;
 
             if (!name || !url) {
-                alert('请填写名称和网址');
+                alert(t.alertFillFields);
                 return;
             }
 
@@ -1608,7 +1756,13 @@
             });
         });
 
-        // --- Event Listeners for Theme & Engine & Colors & Targets ---
+        // --- Event Listeners for Theme & Engine & Colors & Targets & Language ---
+        document.querySelectorAll('.lang-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                applyLanguage(chip.getAttribute('data-lang-val'));
+            });
+        });
+
         document.querySelectorAll('.engine-chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 const engineKey = chip.getAttribute('data-engine-val');
@@ -1658,7 +1812,8 @@
         document.getElementById('settingsBtn').addEventListener('click', () => openModal('settingsModal'));
         document.getElementById('closeSettingsBtn').addEventListener('click', () => closeModal('settingsModal'));
 
-        // Initialize Theme & Color Algorithm & Target & Engine
+        // Initialize Language & Theme & Color Algorithm & Target & Engine
+        applyLanguage(currentLang);
         applyTheme(currentTheme);
         applyColor(currentSeedColor);
         applySearchTarget(searchTarget);
