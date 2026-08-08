@@ -41,8 +41,3 @@
 * **原生 JavaScript (ES6+)**（DOM 操作、`localStorage` 持久化）
 * **Google Fonts & Material Symbols**（Google Sans & Material Symbols Rounded 字体图库）
 
----
-
-## 📄 开源协议
-
-本项目采用 [MIT License](LICENSE) 协议开源。
