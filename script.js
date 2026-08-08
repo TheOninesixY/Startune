@@ -51,6 +51,9 @@ const i18n = {
         labelDefaultEngine: '默认搜索引擎',
         labelSearchTarget: '搜索跳转目标',
         labelShortcutTarget: '快捷方式跳转目标',
+        labelGreeting: '问候语',
+        greetingShow: '显示',
+        greetingHide: '隐藏',
         targetNewTab: '新标签页',
         targetCurrentTab: '当前标签页',
         labelAccentColor: '主题主色 (Accent Seed Color)',
@@ -93,6 +96,9 @@ const i18n = {
         labelDefaultEngine: 'Default search engine',
         labelSearchTarget: 'Search link target',
         labelShortcutTarget: 'Shortcut link target',
+        labelGreeting: 'Greeting',
+        greetingShow: 'Show',
+        greetingHide: 'Hide',
         targetNewTab: 'New tab',
         targetCurrentTab: 'Current tab',
         labelAccentColor: 'Accent Color (Seed Color)',
@@ -139,6 +145,7 @@ let defaultEngine = localStorage.getItem('startune_default_engine') || 'google';
 let currentEngine = defaultEngine;
 let searchTarget = localStorage.getItem('startune_search_target') || '_blank';
 let shortcutTarget = localStorage.getItem('startune_shortcut_target') || '_blank';
+let showGreeting = localStorage.getItem('startune_show_greeting') !== 'false'; // 默认为 true (显示)
 let editingShortcutIndex = -1; // -1 means adding new
 let activeShortcutIndex = -1;  // index selected for context menu
 
@@ -331,6 +338,20 @@ function applyShortcutTarget(target) {
     });
 
     renderShortcuts();
+}
+
+function applyGreeting(visible) {
+    showGreeting = visible;
+    localStorage.setItem('startune_show_greeting', visible ? 'true' : 'false');
+
+    const greetingBadge = document.querySelector('.greeting-badge');
+    if (greetingBadge) {
+        greetingBadge.style.display = visible ? 'inline-flex' : 'none';
+    }
+
+    document.querySelectorAll('.greeting-chip').forEach(chip => {
+        chip.classList.toggle('active', (chip.getAttribute('data-greeting-val') === 'show') === visible);
+    });
 }
 
 function applyColor(seedHex) {
@@ -767,6 +788,13 @@ document.querySelectorAll('.target-chip').forEach(chip => {
     });
 });
 
+document.querySelectorAll('.greeting-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+        const val = chip.getAttribute('data-greeting-val');
+        applyGreeting(val === 'show');
+    });
+});
+
 document.querySelectorAll('.theme-chip').forEach(chip => {
     chip.addEventListener('click', () => {
         applyTheme(chip.getAttribute('data-theme-val'));
@@ -797,12 +825,13 @@ hexInput.addEventListener('input', (e) => {
 document.getElementById('settingsBtn').addEventListener('click', () => openModal('settingsModal'));
 document.getElementById('closeSettingsBtn').addEventListener('click', () => closeModal('settingsModal'));
 
-// Initialize Language & Theme & Color Algorithm & Target & Engine
+// Initialize Language & Theme & Color Algorithm & Target & Engine & Greeting
 applyLanguage(currentLang);
 applyTheme(currentTheme);
 applyColor(currentSeedColor);
 applySearchTarget(searchTarget);
 applyShortcutTarget(shortcutTarget);
+applyGreeting(showGreeting);
 setEngine(defaultEngine, false);
 
 // Modal Helpers

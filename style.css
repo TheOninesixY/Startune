@@ -673,7 +673,7 @@ main {
     width: 100%;
 }
 
-.theme-chip, .target-chip, .engine-chip, .lang-chip {
+.theme-chip, .target-chip, .engine-chip, .lang-chip, .greeting-chip {
     font-family: inherit;
     flex: 1;
     min-width: 0;
@@ -693,23 +693,23 @@ main {
     padding: 0 6px;
 }
 
-.theme-chip span:last-child, .target-chip span:last-child, .engine-chip span:last-child, .lang-chip span:last-child {
+.theme-chip span:last-child, .target-chip span:last-child, .engine-chip span:last-child, .lang-chip span:last-child, .greeting-chip span:last-child {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.theme-chip:hover, .target-chip:hover, .engine-chip:hover, .lang-chip:hover {
+.theme-chip:hover, .target-chip:hover, .engine-chip:hover, .lang-chip:hover, .greeting-chip:hover {
     background: var(--md-sys-color-surface-container);
 }
 
-.theme-chip.active, .target-chip.active, .engine-chip.active, .lang-chip.active {
+.theme-chip.active, .target-chip.active, .engine-chip.active, .lang-chip.active, .greeting-chip.active {
     background: var(--md-sys-color-primary-container);
     color: var(--md-sys-color-on-primary-container);
     border-color: var(--md-sys-color-primary);
 }
 
-.theme-chip .material-symbols-rounded, .target-chip .material-symbols-rounded, .engine-chip .material-symbols-rounded, .lang-chip .material-symbols-rounded {
+.theme-chip .material-symbols-rounded, .target-chip .material-symbols-rounded, .engine-chip .material-symbols-rounded, .lang-chip .material-symbols-rounded, .greeting-chip .material-symbols-rounded {
     font-size: 18px;
     flex-shrink: 0;
 }
