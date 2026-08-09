@@ -851,7 +851,7 @@ main {
     background: var(--md-sys-color-surface-container);
     border: 1px solid var(--md-sys-color-outline-variant);
     border-radius: var(--md-shape-corner-large);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: none;
 }
 
 .color-picker-popover.active {
@@ -888,7 +888,7 @@ main {
     height: 14px;
     border: 2px solid #fff;
     border-radius: 50%;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
     transform: translate(-50%, -50%);
     pointer-events: none;
 }
@@ -911,7 +911,7 @@ main {
     height: 16px;
     border: 2px solid #fff;
     border-radius: 50%;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    box-shadow: none;
     background: transparent;
     transform: translate(-50%, -50%);
     pointer-events: none;
