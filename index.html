@@ -224,13 +224,23 @@
                         <div class="color-dot" style="background: #e37400;" data-color-val="#e37400" data-i18n-title="colorCoralOrange" title="珊瑚橙"></div>
                         <div class="color-dot" style="background: #a142f4;" data-color-val="#a142f4" data-i18n-title="colorLavenderPurple" title="薰衣紫"></div>
                     </div>
-                    <div class="custom-color-wrapper" data-i18n-title="colorCustomPalette" title="自定义调色盘">
+                    <div class="custom-color-wrapper" id="customColorBtn" data-i18n-title="colorCustomPalette" title="自定义调色盘">
                         <span class="material-symbols-rounded" style="font-size: 20px; color: var(--md-sys-color-on-surface-variant);">colorize</span>
-                        <input type="color" id="customColorPicker" class="custom-color-input" value="#1a73e8">
                     </div>
                     <div class="hex-input-wrapper">
                         <span class="hex-input-prefix">#</span>
                         <input type="text" id="hexInput" class="hex-input" placeholder="1A73E8" maxlength="7">
+                    </div>
+                </div>
+                <!-- 自绘调色盘面板 Popover -->
+                <div class="color-picker-popover" id="colorPickerPopover">
+                    <div class="sat-val-box" id="satValBox">
+                        <div class="sat-val-white"></div>
+                        <div class="sat-val-black"></div>
+                        <div class="sat-val-handle" id="satValHandle"></div>
+                    </div>
+                    <div class="hue-slider-box" id="hueSliderBox">
+                        <div class="hue-handle" id="hueHandle"></div>
                     </div>
                 </div>
             </div>

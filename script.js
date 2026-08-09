@@ -351,19 +351,29 @@ function applyGreeting(visible) {
     }
 }
 
-function applyColor(seedHex, updateHexInput = true) {
+function applyColor(seedHex, updateHexInput = true, updatePickerUI = true) {
     currentSeedColor = seedHex;
     localStorage.setItem('startune_seed_color', seedHex);
 
-    document.getElementById('customColorPicker').value = seedHex;
     if (updateHexInput) {
         document.getElementById('hexInput').value = seedHex.replace('#', '').toUpperCase();
     }
 
-    document.querySelectorAll('.color-dot').forEach(dot => {
+    const isPreset = Array.from(document.querySelectorAll('.color-dot')).some(dot => {
         const val = dot.getAttribute('data-color-val').toLowerCase();
-        dot.classList.toggle('active', val === seedHex.toLowerCase());
+        const active = val === seedHex.toLowerCase();
+        dot.classList.toggle('active', active);
+        return active;
     });
+
+    const customBtn = document.getElementById('customColorBtn');
+    if (customBtn) {
+        customBtn.classList.toggle('active', !isPreset);
+    }
+
+    if (updatePickerUI) {
+        syncCustomPickerUI(seedHex);
+    }
 
     generateMaterialTheme(seedHex);
 }
@@ -806,12 +816,163 @@ document.querySelectorAll('.color-dot').forEach(dot => {
     });
 });
 
-const customColorPicker = document.getElementById('customColorPicker');
-const hexInput = document.getElementById('hexInput');
+// 自绘 HSV 调色盘逻辑
+let pickerHue = 0; // 0~360
+let pickerSat = 1; // 0~1
+let pickerVal = 1; // 0~1
 
-customColorPicker.addEventListener('input', (e) => {
-    applyColor(e.target.value);
-});
+function hexToHsv(hex) {
+    let r = parseInt(hex.slice(1, 3), 16) / 255;
+    let g = parseInt(hex.slice(3, 5), 16) / 255;
+    let b = parseInt(hex.slice(5, 7), 16) / 255;
+
+    let max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, v = max;
+    let d = max - min;
+    s = max === 0 ? 0 : d / max;
+
+    if (max === min) {
+        h = 0;
+    } else {
+        switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+    return { h: h * 360, s, v };
+}
+
+function hsvToHex(h, s, v) {
+    let r, g, b;
+    let i = Math.floor((h / 60) % 6);
+    let f = (h / 60) - Math.floor(h / 60);
+    let p = v * (1 - s);
+    let q = v * (1 - f * s);
+    let t = v * (1 - (1 - f) * s);
+
+    switch (i) {
+        case 0: r = v; g = t; b = p; break;
+        case 1: r = q; g = v; b = p; break;
+        case 2: r = p; g = v; b = t; break;
+        case 3: r = p; g = q; b = v; break;
+        case 4: r = t; g = p; b = v; break;
+        case 5: r = v; g = p; b = q; break;
+    }
+
+    const toHex = x => Math.round(x * 255).toString(16).padStart(2, '0');
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function syncCustomPickerUI(hex) {
+    if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) return;
+    const hsv = hexToHsv(hex);
+    pickerHue = hsv.h;
+    pickerSat = hsv.s;
+    pickerVal = hsv.v;
+
+    const satValBox = document.getElementById('satValBox');
+    const satValHandle = document.getElementById('satValHandle');
+    const hueSliderBox = document.getElementById('hueSliderBox');
+    const hueHandle = document.getElementById('hueHandle');
+
+    if (satValBox && satValHandle && hueSliderBox && hueHandle) {
+        satValBox.style.backgroundColor = `hsl(${pickerHue}, 100%, 50%)`;
+        satValHandle.style.left = `${pickerSat * 100}%`;
+        satValHandle.style.top = `${(1 - pickerVal) * 100}%`;
+        hueHandle.style.left = `${(pickerHue / 360) * 100}%`;
+    }
+}
+
+// 调色盘交互处理
+const customColorBtn = document.getElementById('customColorBtn');
+const colorPickerPopover = document.getElementById('colorPickerPopover');
+const satValBox = document.getElementById('satValBox');
+const hueSliderBox = document.getElementById('hueSliderBox');
+
+if (customColorBtn && colorPickerPopover) {
+    customColorBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        colorPickerPopover.classList.toggle('active');
+        if (colorPickerPopover.classList.contains('active')) {
+            syncCustomPickerUI(currentSeedColor);
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!colorPickerPopover.contains(e.target) && !customColorBtn.contains(e.target)) {
+            colorPickerPopover.classList.remove('active');
+        }
+    });
+}
+
+function handleSatValMove(e) {
+    const rect = satValBox.getBoundingClientRect();
+    const x = Math.max(0, Math.min(rect.width, (e.touches ? e.touches[0].clientX : e.clientX) - rect.left));
+    const y = Math.max(0, Math.min(rect.height, (e.touches ? e.touches[0].clientY : e.clientY) - rect.top));
+
+    pickerSat = x / rect.width;
+    pickerVal = 1 - (y / rect.height);
+
+    const newHex = hsvToHex(pickerHue, pickerSat, pickerVal);
+    applyColor(newHex, true, false);
+
+    document.getElementById('satValHandle').style.left = `${x}px`;
+    document.getElementById('satValHandle').style.top = `${y}px`;
+}
+
+function handleHueMove(e) {
+    const rect = hueSliderBox.getBoundingClientRect();
+    const x = Math.max(0, Math.min(rect.width, (e.touches ? e.touches[0].clientX : e.clientX) - rect.left));
+
+    pickerHue = (x / rect.width) * 360;
+    if (pickerHue >= 360) pickerHue = 359.9;
+
+    satValBox.style.backgroundColor = `hsl(${pickerHue}, 100%, 50%)`;
+
+    const newHex = hsvToHex(pickerHue, pickerSat, pickerVal);
+    applyColor(newHex, true, false);
+
+    document.getElementById('hueHandle').style.left = `${x}px`;
+}
+
+let isDraggingSatVal = false;
+let isDraggingHue = false;
+
+if (satValBox && hueSliderBox) {
+    satValBox.addEventListener('pointerdown', (e) => {
+        isDraggingSatVal = true;
+        satValBox.setPointerCapture(e.pointerId);
+        handleSatValMove(e);
+    });
+
+    satValBox.addEventListener('pointermove', (e) => {
+        if (isDraggingSatVal) handleSatValMove(e);
+    });
+
+    satValBox.addEventListener('pointerup', (e) => {
+        isDraggingSatVal = false;
+        try { satValBox.releasePointerCapture(e.pointerId); } catch(err) {}
+    });
+
+    hueSliderBox.addEventListener('pointerdown', (e) => {
+        isDraggingHue = true;
+        hueSliderBox.setPointerCapture(e.pointerId);
+        handleHueMove(e);
+    });
+
+    hueSliderBox.addEventListener('pointermove', (e) => {
+        if (isDraggingHue) handleHueMove(e);
+    });
+
+    hueSliderBox.addEventListener('pointerup', (e) => {
+        isDraggingHue = false;
+        try { hueSliderBox.releasePointerCapture(e.pointerId); } catch(err) {}
+    });
+}
+
+const hexInput = document.getElementById('hexInput');
 
 hexInput.addEventListener('input', (e) => {
     let rawVal = e.target.value.trim();
