@@ -244,14 +244,16 @@ function generateMaterialTheme(seedHex) {
     const isDark = isDarkEffective();
 
     const softChroma = Math.min(s, 45);
+    // 动态色彩饱和度因子：低饱和度或无彩色（黑白灰）时平滑降至 0，避免强制叠加饱和度导致 Hue=0(红) 显色发红
+    const chromaFactor = Math.min(s / 15, 1);
     let tokens = {};
 
     if (!isDark) {
         tokens = {
             '--md-sys-color-primary': safeSeedHex,
             '--md-sys-color-on-primary': '#ffffff',
-            '--md-sys-color-primary-container': `hsl(${h}, ${Math.min(softChroma + 15, 60)}%, 93%)`,
-            '--md-sys-color-on-primary-container': `hsl(${h}, ${Math.max(softChroma, 50)}%, 25%)`,
+            '--md-sys-color-primary-container': `hsl(${h}, ${Math.min(softChroma + 15 * chromaFactor, 60)}%, 93%)`,
+            '--md-sys-color-on-primary-container': `hsl(${h}, ${softChroma + (50 - softChroma) * chromaFactor}%, 25%)`,
 
             '--md-sys-color-surface': `hsl(${h}, ${Math.min(softChroma, 15)}%, 97%)`,
             '--md-sys-color-surface-container-lowest': '#ffffff',
@@ -260,16 +262,16 @@ function generateMaterialTheme(seedHex) {
             '--md-sys-color-surface-container-high': `hsl(${h}, ${Math.min(softChroma, 22)}%, 89%)`,
             '--md-sys-color-surface-container-highest': `hsl(${h}, ${Math.min(softChroma, 25)}%, 86%)`,
 
-            '--md-sys-color-on-surface': `hsl(${h}, 10%, 14%)`,
-            '--md-sys-color-on-surface-variant': `hsl(${h}, 12%, 36%)`,
-            '--md-sys-color-outline': `hsl(${h}, 10%, 55%)`,
+            '--md-sys-color-on-surface': `hsl(${h}, ${10 * chromaFactor}%, 14%)`,
+            '--md-sys-color-on-surface-variant': `hsl(${h}, ${12 * chromaFactor}%, 36%)`,
+            '--md-sys-color-outline': `hsl(${h}, ${10 * chromaFactor}%, 55%)`,
             '--md-sys-color-outline-variant': `hsl(${h}, ${Math.min(softChroma, 22)}%, 88%)`
         };
     } else {
         tokens = {
-            '--md-sys-color-primary': `hsl(${h}, ${Math.min(softChroma + 20, 85)}%, 80%)`,
-            '--md-sys-color-on-primary': `hsl(${h}, ${Math.max(softChroma, 60)}%, 15%)`,
-            '--md-sys-color-primary-container': `hsl(${h}, ${Math.max(softChroma, 50)}%, 26%)`,
+            '--md-sys-color-primary': `hsl(${h}, ${Math.min(softChroma + 20 * chromaFactor, 85)}%, 80%)`,
+            '--md-sys-color-on-primary': `hsl(${h}, ${softChroma + (60 - softChroma) * chromaFactor}%, 15%)`,
+            '--md-sys-color-primary-container': `hsl(${h}, ${softChroma + (50 - softChroma) * chromaFactor}%, 26%)`,
             '--md-sys-color-on-primary-container': `hsl(${h}, ${Math.min(softChroma, 60)}%, 90%)`,
 
             '--md-sys-color-surface': `hsl(${h}, ${Math.min(softChroma, 15)}%, 9%)`,
@@ -279,9 +281,9 @@ function generateMaterialTheme(seedHex) {
             '--md-sys-color-surface-container-high': `hsl(${h}, ${Math.min(softChroma, 15)}%, 18%)`,
             '--md-sys-color-surface-container-highest': `hsl(${h}, ${Math.min(softChroma, 15)}%, 22%)`,
 
-            '--md-sys-color-on-surface': `hsl(${h}, 10%, 90%)`,
-            '--md-sys-color-on-surface-variant': `hsl(${h}, 12%, 78%)`,
-            '--md-sys-color-outline': `hsl(${h}, 10%, 55%)`,
+            '--md-sys-color-on-surface': `hsl(${h}, ${10 * chromaFactor}%, 90%)`,
+            '--md-sys-color-on-surface-variant': `hsl(${h}, ${12 * chromaFactor}%, 78%)`,
+            '--md-sys-color-outline': `hsl(${h}, ${10 * chromaFactor}%, 55%)`,
             '--md-sys-color-outline-variant': `hsl(${h}, ${Math.min(softChroma, 18)}%, 24%)`
         };
     }
