@@ -1,12 +1,12 @@
-// --- 域名与运行环境检测跳转 ---
+// --- Domain and Environment Detection Redirect ---
 (function checkDomainRedirect() {
     const targetHost = 'stune.onsy.qzz.io';
     const { protocol, hostname, href } = window.location;
 
-    // 1. 直接 File:// 预览
+    // 1. Direct File:// preview
     if (protocol === 'file:') return;
 
-    // 2. 本地回环域名及常见局域网后缀 (.local, .lan)
+    // 2. Local loopback domain and common LAN suffixes (.local, .lan)
     if (
         hostname === 'localhost' ||
         hostname === '::1' ||
@@ -14,105 +14,15 @@
         hostname.endsWith('.lan')
     ) return;
 
-    // 3. 内网 / 回环 IP 正则判定 (127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16)
+    // 3. Intranet / loopback IP regex check (127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16)
     const privateIpRegex = /^(127\.\d+\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+)$/;
     if (privateIpRegex.test(hostname)) return;
 
-    // 4. 若非目标域名则保持路径跳转至 stune.onsy.qzz.io
+    // 4. If not the target domain, redirect while keeping the path to stune.onsy.qzz.io
     if (hostname !== targetHost) {
         window.location.replace(href.replace(location.host, targetHost));
     }
 })();
-
-// --- i18n Translations Dictionary ---
-const i18n = {
-    zh: {
-        settingsBtnTitle: '设置',
-        searchInputPlaceholder: '搜索网络或输入网址...',
-        searchBtnTitle: '开始搜索',
-        engineBaidu: '百度',
-        engineBilibili: '哔哩哔哩',
-        ctxEdit: '修改',
-        ctxDelete: '删除',
-        addShortcutTitle: '添加快捷方式',
-        editShortcutTitle: '修改快捷方式',
-        addShortcutBtn: '添加快捷方式',
-        labelShortcutName: '名称',
-        placeholderShortcutName: '例如：GitHub',
-        labelShortcutUrl: '网址 (URL)',
-        btnCancel: '取消',
-        btnSave: '保存',
-        settingsTitle: '设置',
-        labelLanguage: '语言 (Language)',
-        labelTheme: '外观模式',
-        themeSystem: '跟随系统',
-        themeLight: '浅色',
-        themeDark: '深色',
-        labelDefaultEngine: '默认搜索引擎',
-        labelSearchTarget: '搜索跳转目标',
-        labelShortcutTarget: '快捷方式跳转目标',
-        labelGreeting: '显示问候语',
-        targetNewTab: '新标签页',
-        targetCurrentTab: '当前标签页',
-        labelAccentColor: '主题主色 (Accent Seed Color)',
-        colorGoogleBlue: 'Google 蓝',
-        colorEmeraldGreen: '翡翠绿',
-        colorCoralOrange: '珊瑚橙',
-        colorLavenderPurple: '薰衣紫',
-        colorCustomPalette: '自定义调色盘',
-        btnDone: '完成',
-        alertFillFields: '请填写名称和网址',
-        greetingDefault: '你好，准备好开始新的一天了吗？',
-        greetingMorning: '早上好，愿今天充满活力！',
-        greetingAfternoon: '下午好，保持高效专注！',
-        greetingEvening: '晚上好，享受悠闲时光！',
-        dateLocale: 'zh-CN',
-        toastCopied: '已复制'
-    },
-    en: {
-        settingsBtnTitle: 'Settings',
-        searchInputPlaceholder: 'Search the web or type a URL...',
-        searchBtnTitle: 'Search',
-        engineBaidu: 'Baidu',
-        engineBilibili: 'Bilibili',
-        ctxEdit: 'Edit',
-        ctxDelete: 'Delete',
-        addShortcutTitle: 'Add shortcut',
-        editShortcutTitle: 'Edit shortcut',
-        addShortcutBtn: 'Add shortcut',
-        labelShortcutName: 'Name',
-        placeholderShortcutName: 'e.g. GitHub',
-        labelShortcutUrl: 'URL',
-        btnCancel: 'Cancel',
-        btnSave: 'Save',
-        settingsTitle: 'Settings',
-        labelLanguage: 'Language',
-        labelTheme: 'Theme',
-        themeSystem: 'System',
-        themeLight: 'Light',
-        themeDark: 'Dark',
-        labelDefaultEngine: 'Default search engine',
-        labelSearchTarget: 'Search link target',
-        labelShortcutTarget: 'Shortcut link target',
-        labelGreeting: 'Show Greeting',
-        targetNewTab: 'New tab',
-        targetCurrentTab: 'Current tab',
-        labelAccentColor: 'Accent Color (Seed Color)',
-        colorGoogleBlue: 'Google Blue',
-        colorEmeraldGreen: 'Emerald Green',
-        colorCoralOrange: 'Coral Orange',
-        colorLavenderPurple: 'Lavender Purple',
-        colorCustomPalette: 'Custom Color Palette',
-        btnDone: 'Done',
-        alertFillFields: 'Please fill in both name and URL',
-        greetingDefault: 'Hello, ready to start a new day?',
-        greetingMorning: 'Good morning! Have a productive day.',
-        greetingAfternoon: 'Good afternoon! Keep up the great work.',
-        greetingEvening: 'Good evening! Time to relax and unwind.',
-        dateLocale: 'en-US',
-        toastCopied: 'Copied'
-    }
-};
 
 // --- Default Shortcuts Data ---
 const defaultShortcuts = [
@@ -136,12 +46,11 @@ const searchEngines = {
 let shortcuts = JSON.parse(localStorage.getItem('startune_shortcuts')) || defaultShortcuts;
 let currentLang = localStorage.getItem('startune_lang') || 'zh';
 let currentTheme = localStorage.getItem('startune_theme') || 'system';
-let currentSeedColor = localStorage.getItem('startune_seed_color') || '#1a73e8';
 let defaultEngine = localStorage.getItem('startune_default_engine') || 'google';
 let currentEngine = defaultEngine;
 let searchTarget = localStorage.getItem('startune_search_target') || '_blank';
 let shortcutTarget = localStorage.getItem('startune_shortcut_target') || '_blank';
-let showGreeting = localStorage.getItem('startune_show_greeting') !== 'false'; // 默认为 true (显示)
+let showGreeting = localStorage.getItem('startune_show_greeting') !== 'false'; // Default to true (show)
 let editingShortcutIndex = -1; // -1 means adding new
 let activeShortcutIndex = -1;  // index selected for context menu
 
@@ -183,115 +92,6 @@ function applyLanguage(lang) {
 
     // Refresh Shortcuts (Add Card text)
     renderShortcuts();
-}
-
-// --- Material You Dynamic Color Algorithm ---
-function hexToHsl(hex) {
-    hex = hex.replace(/^#/, '');
-    if (hex.length === 3) {
-        hex = hex.split('').map(c => c + c).join('');
-    }
-    const r = parseInt(hex.substring(0, 2), 16) / 255;
-    const g = parseInt(hex.substring(2, 4), 16) / 255;
-    const b = parseInt(hex.substring(4, 6), 16) / 255;
-
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h = 0, s = 0, l = (max + min) / 2;
-
-    if (max !== min) {
-        const d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        switch (max) {
-            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-            case g: h = (b - r) / d + 2; break;
-            case b: h = (r - g) / d + 4; break;
-        }
-        h /= 6;
-    }
-    return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
-}
-
-function hslToHex(h, s, l) {
-    l /= 100;
-    const a = s * Math.min(l, 1 - l) / 100;
-    const f = n => {
-        const k = (n + h / 30) % 12;
-        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-        return Math.round(255 * color).toString(16).padStart(2, '0');
-    };
-    return `#${f(0)}${f(8)}${f(4)}`;
-}
-
-// Clamp seed lightness so hyper-bright colors don't break contrast/readability
-function clampSeedColor(hex) {
-    let { h, s, l } = hexToHsl(hex);
-    if (l > 65) {
-        l = 65; // cap max lightness to 65% for readability
-        return hslToHex(h, s, l);
-    }
-    return hex;
-}
-
-function isDarkEffective() {
-    if (currentTheme === 'dark') return true;
-    if (currentTheme === 'light') return false;
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
-function generateMaterialTheme(seedHex) {
-    const safeSeedHex = clampSeedColor(seedHex);
-    const { h, s } = hexToHsl(safeSeedHex);
-    const isDark = isDarkEffective();
-
-    const softChroma = Math.min(s, 45);
-    // 动态色彩饱和度因子：低饱和度或无彩色（黑白灰）时平滑降至 0，避免强制叠加饱和度导致 Hue=0(红) 显色发红
-    const chromaFactor = Math.min(s / 15, 1);
-    let tokens = {};
-
-    if (!isDark) {
-        tokens = {
-            '--md-sys-color-primary': safeSeedHex,
-            '--md-sys-color-on-primary': '#ffffff',
-            '--md-sys-color-primary-container': `hsl(${h}, ${Math.min(softChroma + 15 * chromaFactor, 60)}%, 93%)`,
-            '--md-sys-color-on-primary-container': `hsl(${h}, ${softChroma + (50 - softChroma) * chromaFactor}%, 25%)`,
-
-            '--md-sys-color-surface': `hsl(${h}, ${Math.min(softChroma, 15)}%, 97%)`,
-            '--md-sys-color-surface-container-lowest': '#ffffff',
-            '--md-sys-color-surface-container-low': `hsl(${h}, ${Math.min(softChroma, 18)}%, 95%)`,
-            '--md-sys-color-surface-container': `hsl(${h}, ${Math.min(softChroma, 20)}%, 92%)`,
-            '--md-sys-color-surface-container-high': `hsl(${h}, ${Math.min(softChroma, 22)}%, 89%)`,
-            '--md-sys-color-surface-container-highest': `hsl(${h}, ${Math.min(softChroma, 25)}%, 86%)`,
-
-            '--md-sys-color-on-surface': `hsl(${h}, ${10 * chromaFactor}%, 14%)`,
-            '--md-sys-color-on-surface-variant': `hsl(${h}, ${12 * chromaFactor}%, 36%)`,
-            '--md-sys-color-outline': `hsl(${h}, ${10 * chromaFactor}%, 55%)`,
-            '--md-sys-color-outline-variant': `hsl(${h}, ${Math.min(softChroma, 22)}%, 88%)`
-        };
-    } else {
-        tokens = {
-            '--md-sys-color-primary': `hsl(${h}, ${Math.min(softChroma + 20 * chromaFactor, 85)}%, 80%)`,
-            '--md-sys-color-on-primary': `hsl(${h}, ${softChroma + (60 - softChroma) * chromaFactor}%, 15%)`,
-            '--md-sys-color-primary-container': `hsl(${h}, ${softChroma + (50 - softChroma) * chromaFactor}%, 26%)`,
-            '--md-sys-color-on-primary-container': `hsl(${h}, ${Math.min(softChroma, 60)}%, 90%)`,
-
-            '--md-sys-color-surface': `hsl(${h}, ${Math.min(softChroma, 15)}%, 9%)`,
-            '--md-sys-color-surface-container-lowest': `hsl(${h}, ${Math.min(softChroma, 15)}%, 6%)`,
-            '--md-sys-color-surface-container-low': `hsl(${h}, ${Math.min(softChroma, 15)}%, 11%)`,
-            '--md-sys-color-surface-container': `hsl(${h}, ${Math.min(softChroma, 15)}%, 14%)`,
-            '--md-sys-color-surface-container-high': `hsl(${h}, ${Math.min(softChroma, 15)}%, 18%)`,
-            '--md-sys-color-surface-container-highest': `hsl(${h}, ${Math.min(softChroma, 15)}%, 22%)`,
-
-            '--md-sys-color-on-surface': `hsl(${h}, ${10 * chromaFactor}%, 90%)`,
-            '--md-sys-color-on-surface-variant': `hsl(${h}, ${12 * chromaFactor}%, 78%)`,
-            '--md-sys-color-outline': `hsl(${h}, ${10 * chromaFactor}%, 55%)`,
-            '--md-sys-color-outline-variant': `hsl(${h}, ${Math.min(softChroma, 18)}%, 24%)`
-        };
-    }
-
-    const root = document.documentElement;
-    Object.keys(tokens).forEach(key => {
-        root.style.setProperty(key, tokens[key]);
-    });
 }
 
 // --- Apply Theme & Color & Target & Engine ---
@@ -353,33 +153,6 @@ function applyGreeting(visible) {
     }
 }
 
-function applyColor(seedHex, updateHexInput = true, updatePickerUI = true) {
-    currentSeedColor = seedHex;
-    localStorage.setItem('startune_seed_color', seedHex);
-
-    if (updateHexInput) {
-        document.getElementById('hexInput').value = seedHex.replace('#', '').toUpperCase();
-    }
-
-    const isPreset = Array.from(document.querySelectorAll('.color-dot')).some(dot => {
-        const val = dot.getAttribute('data-color-val').toLowerCase();
-        const active = val === seedHex.toLowerCase();
-        dot.classList.toggle('active', active);
-        return active;
-    });
-
-    const customBtn = document.getElementById('customColorBtn');
-    if (customBtn) {
-        customBtn.classList.toggle('active', !isPreset);
-    }
-
-    if (updatePickerUI) {
-        syncCustomPickerUI(seedHex);
-    }
-
-    generateMaterialTheme(seedHex);
-}
-
 function applyTheme(theme) {
     currentTheme = theme;
     document.documentElement.setAttribute('data-theme', theme);
@@ -389,11 +162,13 @@ function applyTheme(theme) {
         chip.classList.toggle('active', chip.getAttribute('data-theme-val') === theme);
     });
 
-    generateMaterialTheme(currentSeedColor);
+    if (typeof generateMaterialTheme === 'function') {
+        generateMaterialTheme(currentSeedColor);
+    }
 }
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (currentTheme === 'system') {
+    if (currentTheme === 'system' && typeof generateMaterialTheme === 'function') {
         generateMaterialTheme(currentSeedColor);
     }
 });
@@ -768,7 +543,7 @@ document.addEventListener('click', () => {
 document.querySelectorAll('.engine-item').forEach(item => {
     item.addEventListener('click', () => {
         const engineKey = item.getAttribute('data-engine');
-        setEngine(engineKey, true); // 搜索框旁边切换：临时修改，不写入 localStorage
+        setEngine(engineKey, true); // Search bar side switch: temporary change, do not write to localStorage
         engineMenu.classList.remove('active');
     });
 });
@@ -783,7 +558,7 @@ document.querySelectorAll('.lang-chip').forEach(chip => {
 document.querySelectorAll('.engine-chip').forEach(chip => {
     chip.addEventListener('click', () => {
         const engineKey = chip.getAttribute('data-engine-val');
-        setEngine(engineKey, false); // 设置面板修改：默认修改，写入 localStorage
+        setEngine(engineKey, false); // Settings panel change: default engine change, write to localStorage
     });
 });
 
@@ -812,192 +587,6 @@ document.querySelectorAll('.theme-chip').forEach(chip => {
     });
 });
 
-document.querySelectorAll('.color-dot').forEach(dot => {
-    dot.addEventListener('click', () => {
-        applyColor(dot.getAttribute('data-color-val'));
-    });
-});
-
-// 自绘 HSV 调色盘逻辑
-let pickerHue = 0; // 0~360
-let pickerSat = 1; // 0~1
-let pickerVal = 1; // 0~1
-
-function hexToHsv(hex) {
-    let r = parseInt(hex.slice(1, 3), 16) / 255;
-    let g = parseInt(hex.slice(3, 5), 16) / 255;
-    let b = parseInt(hex.slice(5, 7), 16) / 255;
-
-    let max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h, s, v = max;
-    let d = max - min;
-    s = max === 0 ? 0 : d / max;
-
-    if (max === min) {
-        h = 0;
-    } else {
-        switch (max) {
-            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-            case g: h = (b - r) / d + 2; break;
-            case b: h = (r - g) / d + 4; break;
-        }
-        h /= 6;
-    }
-    return { h: h * 360, s, v };
-}
-
-function hsvToHex(h, s, v) {
-    let r, g, b;
-    let i = Math.floor((h / 60) % 6);
-    let f = (h / 60) - Math.floor(h / 60);
-    let p = v * (1 - s);
-    let q = v * (1 - f * s);
-    let t = v * (1 - (1 - f) * s);
-
-    switch (i) {
-        case 0: r = v; g = t; b = p; break;
-        case 1: r = q; g = v; b = p; break;
-        case 2: r = p; g = v; b = t; break;
-        case 3: r = p; g = q; b = v; break;
-        case 4: r = t; g = p; b = v; break;
-        case 5: r = v; g = p; b = q; break;
-    }
-
-    const toHex = x => Math.round(x * 255).toString(16).padStart(2, '0');
-    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-}
-
-function syncCustomPickerUI(hex) {
-    if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) return;
-    const hsv = hexToHsv(hex);
-    pickerHue = hsv.h;
-    pickerSat = hsv.s;
-    pickerVal = hsv.v;
-
-    const satValBox = document.getElementById('satValBox');
-    const satValHandle = document.getElementById('satValHandle');
-    const hueSliderBox = document.getElementById('hueSliderBox');
-    const hueHandle = document.getElementById('hueHandle');
-
-    if (satValBox && satValHandle && hueSliderBox && hueHandle) {
-        satValBox.style.backgroundColor = `hsl(${pickerHue}, 100%, 50%)`;
-        satValHandle.style.left = `${pickerSat * 100}%`;
-        satValHandle.style.top = `${(1 - pickerVal) * 100}%`;
-        hueHandle.style.left = `${(pickerHue / 360) * 100}%`;
-    }
-}
-
-// 调色盘交互处理
-const customColorBtn = document.getElementById('customColorBtn');
-const colorPickerPopover = document.getElementById('colorPickerPopover');
-const satValBox = document.getElementById('satValBox');
-const hueSliderBox = document.getElementById('hueSliderBox');
-
-if (customColorBtn && colorPickerPopover) {
-    customColorBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        colorPickerPopover.classList.toggle('active');
-        if (colorPickerPopover.classList.contains('active')) {
-            syncCustomPickerUI(currentSeedColor);
-        }
-    });
-
-    document.addEventListener('click', (e) => {
-        if (!colorPickerPopover.contains(e.target) && !customColorBtn.contains(e.target)) {
-            colorPickerPopover.classList.remove('active');
-        }
-    });
-}
-
-function handleSatValMove(e) {
-    const rect = satValBox.getBoundingClientRect();
-    const x = Math.max(0, Math.min(rect.width, (e.touches ? e.touches[0].clientX : e.clientX) - rect.left));
-    const y = Math.max(0, Math.min(rect.height, (e.touches ? e.touches[0].clientY : e.clientY) - rect.top));
-
-    pickerSat = x / rect.width;
-    pickerVal = 1 - (y / rect.height);
-
-    const newHex = hsvToHex(pickerHue, pickerSat, pickerVal);
-    applyColor(newHex, true, false);
-
-    document.getElementById('satValHandle').style.left = `${x}px`;
-    document.getElementById('satValHandle').style.top = `${y}px`;
-}
-
-function handleHueMove(e) {
-    const rect = hueSliderBox.getBoundingClientRect();
-    const x = Math.max(0, Math.min(rect.width, (e.touches ? e.touches[0].clientX : e.clientX) - rect.left));
-
-    pickerHue = (x / rect.width) * 360;
-    if (pickerHue >= 360) pickerHue = 359.9;
-
-    satValBox.style.backgroundColor = `hsl(${pickerHue}, 100%, 50%)`;
-
-    const newHex = hsvToHex(pickerHue, pickerSat, pickerVal);
-    applyColor(newHex, true, false);
-
-    document.getElementById('hueHandle').style.left = `${x}px`;
-}
-
-let isDraggingSatVal = false;
-let isDraggingHue = false;
-
-if (satValBox && hueSliderBox) {
-    satValBox.addEventListener('pointerdown', (e) => {
-        isDraggingSatVal = true;
-        satValBox.setPointerCapture(e.pointerId);
-        handleSatValMove(e);
-    });
-
-    satValBox.addEventListener('pointermove', (e) => {
-        if (isDraggingSatVal) handleSatValMove(e);
-    });
-
-    satValBox.addEventListener('pointerup', (e) => {
-        isDraggingSatVal = false;
-        try { satValBox.releasePointerCapture(e.pointerId); } catch(err) {}
-    });
-
-    hueSliderBox.addEventListener('pointerdown', (e) => {
-        isDraggingHue = true;
-        hueSliderBox.setPointerCapture(e.pointerId);
-        handleHueMove(e);
-    });
-
-    hueSliderBox.addEventListener('pointermove', (e) => {
-        if (isDraggingHue) handleHueMove(e);
-    });
-
-    hueSliderBox.addEventListener('pointerup', (e) => {
-        isDraggingHue = false;
-        try { hueSliderBox.releasePointerCapture(e.pointerId); } catch(err) {}
-    });
-}
-
-const hexInput = document.getElementById('hexInput');
-
-hexInput.addEventListener('input', (e) => {
-    let rawVal = e.target.value.trim();
-    let val = rawVal.replace(/^#/, '');
-
-    // 支持 3 位缩写颜色码 (如 f00 -> ff0000) 或 6 位颜色码
-    let fullHex = '';
-    if (/^[0-9A-Fa-f]{3}$/.test(val)) {
-        fullHex = val.split('').map(c => c + c).join('');
-    } else if (/^[0-9A-Fa-f]{6}$/.test(val)) {
-        fullHex = val;
-    }
-
-    if (fullHex) {
-        applyColor('#' + fullHex, false);
-    }
-});
-
-hexInput.addEventListener('blur', () => {
-    // 失去焦点时规范化格式（自动补齐 # 和大写，或者还原为有效颜色）
-    hexInput.value = currentSeedColor.replace('#', '').toUpperCase();
-});
-
 // Settings Modal Handlers
 document.getElementById('settingsBtn').addEventListener('click', () => openModal('settingsModal'));
 document.getElementById('closeSettingsBtn').addEventListener('click', () => closeModal('settingsModal'));
@@ -1005,7 +594,9 @@ document.getElementById('closeSettingsBtn').addEventListener('click', () => clos
 // Initialize Language & Theme & Color Algorithm & Target & Engine & Greeting
 applyLanguage(currentLang);
 applyTheme(currentTheme);
-applyColor(currentSeedColor);
+if (typeof applyColor === 'function') {
+    applyColor(currentSeedColor);
+}
 applySearchTarget(searchTarget);
 applyShortcutTarget(shortcutTarget);
 applyGreeting(showGreeting);
