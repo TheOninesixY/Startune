@@ -1,7 +1,7 @@
 /* Font Definitions */
 @font-face {
     font-family: 'Gilroy';
-    src: url('fonts/Gilroy/Gilroy-Light.otf') format('opentype');
+    src: url('fonts/Gilroy-Light.otf') format('opentype');
     font-weight: 300 400;
     font-style: normal;
     font-display: swap;
@@ -9,7 +9,7 @@
 
 @font-face {
     font-family: 'Gilroy';
-    src: url('fonts/Gilroy/Gilroy-ExtraBold.otf') format('opentype');
+    src: url('fonts/Gilroy-ExtraBold.otf') format('opentype');
     font-weight: 700 800 900;
     font-style: normal;
     font-display: swap;
@@ -17,40 +17,9 @@
 
 @font-face {
     font-family: 'MiSans';
-    src: url('fonts/MiSans/MiSans-Thin.ttf') format('truetype');
-    font-weight: 100 200;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'MiSans';
-    src: url('fonts/MiSans/MiSans-Light.ttf') format('truetype');
-    font-weight: 300 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'MiSans';
-    src: url('fonts/MiSans/MiSans-Normal.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'MiSans';
-    src: url('fonts/MiSans/MiSans-Medium.ttf') format('truetype');
-    font-weight: 600 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'MiSans';
-    src: url('fonts/MiSans/MiSans-Bold.ttf') format('truetype');
-    font-weight: 800 900;
+    src: url('fonts/MiSansVF.ttf') format('truetype-variations'),
+         url('fonts/MiSansVF.ttf') format('truetype');
+    font-weight: 100 900;
     font-style: normal;
     font-display: swap;
 }
@@ -116,6 +85,8 @@ button, input {
 
 body {
     font-family: 'Gilroy', 'MiSans', system-ui, -apple-system, sans-serif;
+    font-weight: 300;
+    font-variation-settings: 'wght' 300;
     background-color: var(--md-sys-color-surface);
     color: var(--md-sys-color-on-surface);
     min-height: 100vh;
@@ -252,7 +223,8 @@ main {
 
 .digital-clock {
     font-size: clamp(48px, 12vw, 68px);
-    font-weight: 700;
+    font-weight: 300;
+    font-variation-settings: 'wght' 300;
     letter-spacing: -1.5px;
     line-height: 1.1;
     color: var(--md-sys-color-on-surface);
@@ -265,7 +237,8 @@ main {
     font-size: clamp(13px, 3.5vw, 15px);
     color: var(--md-sys-color-on-surface-variant);
     margin-top: 6px;
-    font-weight: 500;
+    font-weight: 300;
+    font-variation-settings: 'wght' 300;
 }
 
 .greeting-badge {
