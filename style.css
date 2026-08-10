@@ -1,3 +1,60 @@
+/* Font Definitions */
+@font-face {
+    font-family: 'Gilroy';
+    src: url('fonts/Gilroy/Gilroy-Light.otf') format('opentype');
+    font-weight: 300 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gilroy';
+    src: url('fonts/Gilroy/Gilroy-ExtraBold.otf') format('opentype');
+    font-weight: 700 800 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MiSans';
+    src: url('fonts/MiSans/MiSans-Thin.ttf') format('truetype');
+    font-weight: 100 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MiSans';
+    src: url('fonts/MiSans/MiSans-Light.ttf') format('truetype');
+    font-weight: 300 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MiSans';
+    src: url('fonts/MiSans/MiSans-Normal.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MiSans';
+    src: url('fonts/MiSans/MiSans-Medium.ttf') format('truetype');
+    font-weight: 600 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MiSans';
+    src: url('fonts/MiSans/MiSans-Bold.ttf') format('truetype');
+    font-weight: 800 900;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Material Design 3 Palette & Expressive System Tokens */
 :root {
     /* Dynamic variables (Light Mode Default) */
@@ -58,7 +115,7 @@ button, input {
 }
 
 body {
-    font-family: 'Google Sans', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+    font-family: 'Gilroy', 'MiSans', system-ui, -apple-system, sans-serif;
     background-color: var(--md-sys-color-surface);
     color: var(--md-sys-color-on-surface);
     min-height: 100vh;
@@ -940,7 +997,7 @@ main {
     width: 100%;
     border: none;
     background: transparent;
-    font-family: 'Google Sans', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+    font-family: 'Gilroy', 'MiSans', system-ui, -apple-system, sans-serif;
     font-size: 13px;
     font-weight: 500;
     color: var(--md-sys-color-on-surface);
