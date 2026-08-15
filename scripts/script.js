@@ -1,3 +1,17 @@
+// --- Host Check & Redirect ---
+(function() {
+    const targetHost = 'stune.onsy.qzz.io';
+    const host = window.location.hostname;
+    const isLocal = host === 'localhost' ||
+                    host === '127.0.0.1' ||
+                    host === '::1' ||
+                    host.endsWith('.local') ||
+                    window.location.protocol === 'file:';
+    if (!isLocal && host !== targetHost) {
+        window.location.replace('https://' + targetHost + window.location.pathname + window.location.search + window.location.hash);
+    }
+})();
+
 // --- Default Shortcuts Data ---
 const defaultShortcuts = [
     { name: 'Google', url: 'https://www.google.com', icon: 'g_mobiledata' },
@@ -39,7 +53,6 @@ function loadSafeShortcuts() {
 function isLikelyUrl(input) {
     const trimmed = input.trim();
     if (/^https?:\/\//i.test(trimmed)) return true;
-    // 类似 domain.com、sub.domain.org/path 或带端口的 localhost:3000
     if (/^[a-zA-Z0-9][-a-zA-Z0-9]*(\.[a-zA-Z0-9][-a-zA-Z0-9]*)+(:\d+)?(\/.*)?$/i.test(trimmed)) return true;
     if (/^localhost(:\d+)?(\/.*)?$/i.test(trimmed)) return true;
     return false;

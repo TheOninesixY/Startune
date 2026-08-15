@@ -45,7 +45,7 @@ const i18n = {
     },
     en: {
         settingsBtnTitle: 'Settings',
-        searchInputPlaceholder: 'Search the web or type a URL...',
+        searchInputPlaceholder: 'Search Web...',
         searchBtnTitle: 'Search',
         engineBaidu: 'Baidu',
         engineBilibili: 'Bilibili',
