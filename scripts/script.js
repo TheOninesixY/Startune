@@ -766,7 +766,7 @@ function closeModal(id) {
             modal.classList.remove('closing');
             modal.style.display = 'none';
         }
-    }, 320);
+    }, 400);
 }
 
 document.querySelectorAll('.modal-overlay').forEach(modal => {
