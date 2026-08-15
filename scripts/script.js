@@ -247,11 +247,30 @@ function showContextMenu(e, index) {
 
     contextMenu.style.left = `${Math.max(12, left)}px`;
     contextMenu.style.top = `${Math.max(12, top)}px`;
+    contextMenu.classList.remove('closing');
+    contextMenu.style.display = 'flex';
+    void contextMenu.offsetHeight;
     contextMenu.classList.add('active');
 }
 
 function hideContextMenu() {
+    if (!contextMenu || !contextMenu.classList.contains('active')) return;
     contextMenu.classList.remove('active');
+    contextMenu.classList.add('closing');
+    const onEnd = (e) => {
+        if (e.target === contextMenu) {
+            contextMenu.classList.remove('closing');
+            contextMenu.style.display = 'none';
+            contextMenu.removeEventListener('transitionend', onEnd);
+        }
+    };
+    contextMenu.addEventListener('transitionend', onEnd);
+    setTimeout(() => {
+        if (contextMenu.classList.contains('closing')) {
+            contextMenu.classList.remove('closing');
+            contextMenu.style.display = 'none';
+        }
+    }, 200);
 }
 
 document.addEventListener('click', hideContextMenu);
@@ -595,6 +614,33 @@ const engineMenu = document.getElementById('engineMenu');
 const searchForm = document.getElementById('searchForm');
 const searchInput = document.getElementById('searchInput');
 
+function openEngineMenu() {
+    engineMenu.classList.remove('closing');
+    engineMenu.style.display = 'flex';
+    void engineMenu.offsetHeight;
+    engineMenu.classList.add('active');
+}
+
+function closeEngineMenu() {
+    if (!engineMenu || !engineMenu.classList.contains('active')) return;
+    engineMenu.classList.remove('active');
+    engineMenu.classList.add('closing');
+    const onEnd = (e) => {
+        if (e.target === engineMenu) {
+            engineMenu.classList.remove('closing');
+            engineMenu.style.display = 'none';
+            engineMenu.removeEventListener('transitionend', onEnd);
+        }
+    };
+    engineMenu.addEventListener('transitionend', onEnd);
+    setTimeout(() => {
+        if (engineMenu.classList.contains('closing')) {
+            engineMenu.classList.remove('closing');
+            engineMenu.style.display = 'none';
+        }
+    }, 220);
+}
+
 // 支持直接在搜索框中输入网址并跳转
 searchForm.addEventListener('submit', (e) => {
     const query = searchInput.value.trim();
@@ -616,18 +662,22 @@ searchForm.addEventListener('submit', (e) => {
 
 engineSelector.addEventListener('click', (e) => {
     e.stopPropagation();
-    engineMenu.classList.toggle('active');
+    if (engineMenu.classList.contains('active')) {
+        closeEngineMenu();
+    } else {
+        openEngineMenu();
+    }
 });
 
 document.addEventListener('click', () => {
-    engineMenu.classList.remove('active');
+    closeEngineMenu();
 });
 
 document.querySelectorAll('.engine-item').forEach(item => {
     item.addEventListener('click', () => {
         const engineKey = item.getAttribute('data-engine');
         setEngine(engineKey, true); // Search bar side switch: temporary change, do not write to localStorage
-        engineMenu.classList.remove('active');
+        closeEngineMenu();
     });
 });
 
@@ -685,21 +735,44 @@ applyShortcutTarget(shortcutTarget);
 applyGreeting(showGreeting);
 setEngine(defaultEngine, false);
 
-// Modal Helpers
+// Modal Helpers (支持平滑滑入滑出与背景淡入淡出动画)
 function openModal(id) {
     const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.classList.remove('closing');
+    modal.style.display = 'flex';
+    // 强制触发回流以确保 transition 动画平滑播放
+    void modal.offsetHeight;
     modal.classList.add('active');
 }
 
 function closeModal(id) {
     const modal = document.getElementById(id);
+    if (!modal || !modal.classList.contains('active')) return;
     modal.classList.remove('active');
+    modal.classList.add('closing');
+
+    const onTransitionEnd = (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('closing');
+            modal.style.display = 'none';
+            modal.removeEventListener('transitionend', onTransitionEnd);
+        }
+    };
+    modal.addEventListener('transitionend', onTransitionEnd);
+    // 安全兜底定时器，防止某些异常情况下 transitionend 未触发
+    setTimeout(() => {
+        if (modal.classList.contains('closing')) {
+            modal.classList.remove('closing');
+            modal.style.display = 'none';
+        }
+    }, 320);
 }
 
 document.querySelectorAll('.modal-overlay').forEach(modal => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-            modal.classList.remove('active');
+            closeModal(modal.id);
         }
     });
 });
@@ -707,10 +780,11 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
 // 全局 Esc 键快速关闭弹窗与下拉菜单
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
-        if (engineMenu) engineMenu.classList.remove('active');
-        if (contextMenu) contextMenu.classList.remove('active');
-        const colorPicker = document.getElementById('colorPickerPopover');
-        if (colorPicker) colorPicker.classList.remove('active');
+        document.querySelectorAll('.modal-overlay.active').forEach(m => closeModal(m.id));
+        closeEngineMenu();
+        hideContextMenu();
+        if (typeof window.closeColorPicker === 'function') {
+            window.closeColorPicker();
+        }
     }
 });

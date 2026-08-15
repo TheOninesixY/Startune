@@ -274,17 +274,49 @@ function initColorListeners() {
     const hueSliderBox = document.getElementById('hueSliderBox');
 
     if (customColorBtn && colorPickerPopover) {
+        function openColorPicker() {
+            colorPickerPopover.classList.remove('closing');
+            colorPickerPopover.style.display = 'flex';
+            void colorPickerPopover.offsetHeight;
+            colorPickerPopover.classList.add('active');
+            syncCustomPickerUI(currentSeedColor);
+        }
+
+        function closeColorPicker() {
+            if (!colorPickerPopover.classList.contains('active')) return;
+            colorPickerPopover.classList.remove('active');
+            colorPickerPopover.classList.add('closing');
+            const onTransitionEnd = (e) => {
+                if (e.target === colorPickerPopover) {
+                    colorPickerPopover.classList.remove('closing');
+                    colorPickerPopover.style.display = 'none';
+                    colorPickerPopover.removeEventListener('transitionend', onTransitionEnd);
+                }
+            };
+            colorPickerPopover.addEventListener('transitionend', onTransitionEnd);
+            setTimeout(() => {
+                if (colorPickerPopover.classList.contains('closing')) {
+                    colorPickerPopover.classList.remove('closing');
+                    colorPickerPopover.style.display = 'none';
+                }
+            }, 260);
+        }
+
+        // 挂载全局方法方便 Esc 或外部安全关闭
+        window.closeColorPicker = closeColorPicker;
+
         customColorBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            colorPickerPopover.classList.toggle('active');
             if (colorPickerPopover.classList.contains('active')) {
-                syncCustomPickerUI(currentSeedColor);
+                closeColorPicker();
+            } else {
+                openColorPicker();
             }
         });
 
         document.addEventListener('click', (e) => {
             if (!colorPickerPopover.contains(e.target) && !customColorBtn.contains(e.target)) {
-                colorPickerPopover.classList.remove('active');
+                closeColorPicker();
             }
         });
     }
