@@ -777,14 +777,50 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
     });
 });
 
-// 全局 Esc 键快速关闭弹窗与下拉菜单
+// 全局 Esc 键快速关闭弹窗与下拉菜单，以及全局按键自动聚焦搜索框
 document.addEventListener('keydown', (e) => {
+    // 1. Esc 快捷关闭
     if (e.key === 'Escape') {
         document.querySelectorAll('.modal-overlay.active').forEach(m => closeModal(m.id));
         closeEngineMenu();
         hideContextMenu();
         if (typeof window.closeColorPicker === 'function') {
             window.closeColorPicker();
+        }
+        return;
+    }
+
+    // 2. 如果存在激活的弹窗，不拦截按键
+    const hasActiveModal = document.querySelector('.modal-overlay.active');
+    if (hasActiveModal) return;
+
+    // 3. 忽略特殊修饰组合键 (如 Ctrl+C, Alt+Tab, Cmd+R, F1~F12 等)
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+    if (e.key === 'Tab' || e.key === 'Enter' || e.key === 'Shift' || e.key === 'Control' || e.key === 'Alt' || e.key === 'Meta' || e.key === 'CapsLock') return;
+    if (/^F\d{1,2}$/.test(e.key)) return;
+
+    // 4. 判断当前焦点是否已经在输入控件或可编辑元素上
+    const activeEl = document.activeElement;
+    const isEditing = activeEl && (
+        activeEl.tagName === 'INPUT' ||
+        activeEl.tagName === 'TEXTAREA' ||
+        activeEl.isContentEditable
+    );
+
+    const searchInput = document.getElementById('searchInput');
+    if (!searchInput) return;
+
+    // 5. 若未聚焦在搜索框上，自动聚焦并输入文本
+    if (activeEl !== searchInput) {
+        if (!isEditing) {
+            searchInput.focus();
+            // 单字符直接输入（支持中英文、数字、符号、空格等可打印字符），非单字符（如 Backspace/Delete 等）由 focus 后的浏览器行为自然接管
+            if (e.key.length === 1) {
+                e.preventDefault();
+                searchInput.value += e.key;
+                // 触发 input 事件以保证可能存在的监听器正常响应
+                searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
         }
     }
 });
