@@ -109,6 +109,15 @@ function generateMaterialTheme(seedHex) {
     Object.keys(tokens).forEach(key => {
         root.style.setProperty(key, tokens[key]);
     });
+
+    updateFaviconColor(tokens['--md-sys-color-primary'] || safeSeedHex);
+}
+
+function updateFaviconColor(color) {
+    const favicon = document.getElementById('dynamicFavicon') || document.querySelector("link[rel~='icon']");
+    if (!favicon) return;
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='100' height='100'><path fill='${color}' d='M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5 5.5-2.5-5.5-2.5zm7.5 5.5l-1.25 2.75L15 19l2.75 1.25L19 22l1.25-2.75L23 19l-2.75-1.25L19 15z'/></svg>`;
+    favicon.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
 
 function applyColor(seedHex, updateHexInput = true, updatePickerUI = true) {
