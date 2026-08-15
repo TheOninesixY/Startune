@@ -60,10 +60,6 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    user-select: none;
-    -webkit-user-select: none;
-    font-weight: 300;
-    font-variation-settings: 'wght' 300;
 }
 
 html, body {
@@ -98,6 +94,21 @@ body {
     justify-content: space-between;
     align-items: center;
     transition: background-color var(--transition-medium), color var(--transition-medium);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Allow text selection where appropriate */
+.digital-clock,
+.date-display,
+.greeting-badge,
+.modal-title,
+.form-group label,
+.search-input,
+.form-input,
+.hex-input {
+    user-select: text;
+    -webkit-user-select: text;
 }
 
 /* Fullscreen App Cover Overlay */
@@ -176,6 +187,20 @@ header {
     align-items: center;
     gap: 10px;
     flex-shrink: 0;
+}
+
+.icon-btn:focus-visible,
+.search-btn:focus-visible,
+.btn:focus-visible,
+.theme-chip:focus-visible,
+.target-chip:focus-visible,
+.engine-chip:focus-visible,
+.lang-chip:focus-visible,
+.custom-color-wrapper:focus-visible,
+.shortcut-card:focus-visible,
+.engine-selector:focus-visible {
+    outline: 2px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
 }
 
 .icon-btn {

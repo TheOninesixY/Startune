@@ -147,9 +147,17 @@ let pickerSat = 1; // 0~1
 let pickerVal = 1; // 0~1
 
 function hexToHsv(hex) {
-    let r = parseInt(hex.slice(1, 3), 16) / 255;
-    let g = parseInt(hex.slice(3, 5), 16) / 255;
-    let b = parseInt(hex.slice(5, 7), 16) / 255;
+    hex = (hex || '').replace(/^#/, '');
+    if (hex.length === 3) {
+        hex = hex.split('').map(c => c + c).join('');
+    }
+    if (!/^[0-9A-Fa-f]{6}$/.test(hex)) {
+        return { h: 0, s: 0, v: 1 };
+    }
+
+    let r = parseInt(hex.slice(0, 2), 16) / 255;
+    let g = parseInt(hex.slice(2, 4), 16) / 255;
+    let b = parseInt(hex.slice(4, 6), 16) / 255;
 
     let max = Math.max(r, g, b), min = Math.min(r, g, b);
     let h, s, v = max;

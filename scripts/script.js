@@ -1,29 +1,3 @@
-// --- Domain and Environment Detection Redirect ---
-(function checkDomainRedirect() {
-    const targetHost = 'stune.onsy.qzz.io';
-    const { protocol, hostname, href } = window.location;
-
-    // 1. Direct File:// preview
-    if (protocol === 'file:') return;
-
-    // 2. Local loopback domain and common LAN suffixes (.local, .lan)
-    if (
-        hostname === 'localhost' ||
-        hostname === '::1' ||
-        hostname.endsWith('.local') ||
-        hostname.endsWith('.lan')
-    ) return;
-
-    // 3. Intranet / loopback IP regex check (127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16)
-    const privateIpRegex = /^(127\.\d+\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+)$/;
-    if (privateIpRegex.test(hostname)) return;
-
-    // 4. If not the target domain, redirect while keeping the path to stune.onsy.qzz.io
-    if (hostname !== targetHost) {
-        window.location.replace(href.replace(location.host, targetHost));
-    }
-})();
-
 // --- Default Shortcuts Data ---
 const defaultShortcuts = [
     { name: 'Google', url: 'https://www.google.com', icon: 'g_mobiledata' },
@@ -42,8 +16,46 @@ const searchEngines = {
     github: { name: 'GitHub', action: 'https://github.com/search', param: 'q' }
 };
 
+// --- Safe localStorage Reader ---
+function loadSafeShortcuts() {
+    try {
+        const raw = localStorage.getItem('startune_shortcuts');
+        if (!raw) return defaultShortcuts;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed.map(item => ({
+                name: String(item.name || '').trim(),
+                url: String(item.url || '').trim(),
+                icon: String(item.icon || 'public')
+            })).filter(item => item.name && item.url);
+        }
+        return defaultShortcuts;
+    } catch (e) {
+        return defaultShortcuts;
+    }
+}
+
+// --- URL / Search Query Helper ---
+function isLikelyUrl(input) {
+    const trimmed = input.trim();
+    if (/^https?:\/\//i.test(trimmed)) return true;
+    // 类似 domain.com、sub.domain.org/path 或带端口的 localhost:3000
+    if (/^[a-zA-Z0-9][-a-zA-Z0-9]*(\.[a-zA-Z0-9][-a-zA-Z0-9]*)+(:\d+)?(\/.*)?$/i.test(trimmed)) return true;
+    if (/^localhost(:\d+)?(\/.*)?$/i.test(trimmed)) return true;
+    return false;
+}
+
+function getSafeHostname(urlStr) {
+    try {
+        const u = new URL(urlStr.startsWith('http://') || urlStr.startsWith('https://') ? urlStr : `https://${urlStr}`);
+        return u.hostname;
+    } catch (e) {
+        return urlStr.replace(/^https?:\/\//i, '').split('/')[0] || 'localhost';
+    }
+}
+
 // --- State Management ---
-let shortcuts = JSON.parse(localStorage.getItem('startune_shortcuts')) || defaultShortcuts;
+let shortcuts = loadSafeShortcuts();
 let currentLang = localStorage.getItem('startune_lang') || 'zh';
 let currentTheme = localStorage.getItem('startune_theme') || 'system';
 let defaultEngine = localStorage.getItem('startune_default_engine') || 'google';
@@ -76,7 +88,12 @@ function applyLanguage(lang) {
 
     document.querySelectorAll('[data-i18n-title]').forEach(elem => {
         const key = elem.getAttribute('data-i18n-title');
-        if (t[key]) elem.title = t[key];
+        if (t[key]) {
+            elem.title = t[key];
+            if (elem.hasAttribute('aria-label')) {
+                elem.setAttribute('aria-label', t[key]);
+            }
+        }
     });
 
     // Update Language Chips
@@ -103,7 +120,7 @@ function setEngine(engineKey, isTemporary = false) {
     const searchInput = document.getElementById('searchInput');
     searchForm.action = engine.action;
     searchInput.name = engine.param;
-    
+
     const displayName = (currentLang === 'en' && engine.nameEn) ? engine.nameEn : engine.name;
     document.getElementById('engineName').textContent = displayName;
 
@@ -256,7 +273,7 @@ document.getElementById('ctxDelete').addEventListener('click', () => {
     hideContextMenu();
 });
 
-// --- Render Shortcuts with Drag and Drop ---
+// --- Render Shortcuts with Drag and Drop & Touch Handling ---
 let draggedIndex = null;
 
 function renderShortcuts() {
@@ -273,28 +290,52 @@ function renderShortcuts() {
         card.draggable = true;
         card.setAttribute('data-index', index);
 
-        const faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(item.url).hostname}&sz=64`;
+        const hostname = getSafeHostname(item.url);
+        const faviconUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(hostname)}&sz=64`;
 
-        card.innerHTML = `
-            <div class="shortcut-icon-wrapper">
-                <img src="${faviconUrl}" alt="${item.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="shortcut-icon-fallback" style="display:none;">
-                    <span class="material-symbols-rounded">${item.icon || 'public'}</span>
-                </div>
-            </div>
-            <div class="shortcut-title">${item.name}</div>
-        `;
+        // 采用安全的 DOM 构造方式，防御 XSS
+        const iconWrapper = document.createElement('div');
+        iconWrapper.className = 'shortcut-icon-wrapper';
 
-        // Drag & Drop Handlers (HTML5 Drag and Drop)
+        const img = document.createElement('img');
+        img.src = faviconUrl;
+        img.alt = item.name;
+
+        const fallback = document.createElement('div');
+        fallback.className = 'shortcut-icon-fallback';
+        fallback.style.display = 'none';
+
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'material-symbols-rounded';
+        iconSpan.textContent = item.icon || 'public';
+        fallback.appendChild(iconSpan);
+
+        img.onerror = () => {
+            img.style.display = 'none';
+            fallback.style.display = 'flex';
+        };
+
+        iconWrapper.appendChild(img);
+        iconWrapper.appendChild(fallback);
+
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'shortcut-title';
+        titleDiv.textContent = item.name;
+
+        card.appendChild(iconWrapper);
+        card.appendChild(titleDiv);
+
+        // HTML5 Drag & Drop Handlers
         card.addEventListener('dragstart', (e) => {
             draggedIndex = index;
             card.classList.add('dragging');
             e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', index);
+            e.dataTransfer.setData('text/plain', String(index));
         });
 
         card.addEventListener('dragend', () => {
             card.classList.remove('dragging');
+            draggedIndex = null;
             document.querySelectorAll('.shortcut-card').forEach(c => c.classList.remove('drag-over'));
         });
 
@@ -314,7 +355,6 @@ function renderShortcuts() {
             e.preventDefault();
             card.classList.remove('drag-over');
             if (draggedIndex !== null && draggedIndex !== index) {
-                // Reorder array
                 const draggedItem = shortcuts.splice(draggedIndex, 1)[0];
                 shortcuts.splice(index, 0, draggedItem);
                 draggedIndex = null;
@@ -332,13 +372,26 @@ function renderShortcuts() {
         let isTouchDragging = false;
         let touchStartX = 0, touchStartY = 0;
 
+        const cleanupTouchDrag = () => {
+            clearTimeout(pressTimer);
+            if (touchDragClone && touchDragClone.parentNode) {
+                touchDragClone.parentNode.removeChild(touchDragClone);
+            }
+            touchDragClone = null;
+            draggedIndex = null;
+            isTouchDragging = false;
+            document.querySelectorAll('.shortcut-card').forEach(c => {
+                c.classList.remove('dragging');
+                c.classList.remove('drag-over');
+            });
+        };
+
         card.addEventListener('touchstart', (e) => {
             const touch = e.touches[0];
             touchStartX = touch.clientX;
             touchStartY = touch.clientY;
 
             pressTimer = setTimeout(() => {
-                // Show context menu on long press
                 showContextMenu(e, index);
             }, 500);
         }, { passive: true });
@@ -348,7 +401,6 @@ function renderShortcuts() {
             const moveX = Math.abs(touch.clientX - touchStartX);
             const moveY = Math.abs(touch.clientY - touchStartY);
 
-            // If user moves finger > 8px, cancel long press and start touch drag
             if (moveX > 8 || moveY > 8) {
                 clearTimeout(pressTimer);
 
@@ -356,7 +408,6 @@ function renderShortcuts() {
                     isTouchDragging = true;
                     draggedIndex = index;
 
-                    // Create floating ghost element
                     touchDragClone = card.cloneNode(true);
                     touchDragClone.classList.add('touch-dragging');
                     touchDragClone.style.width = `${card.offsetWidth}px`;
@@ -371,7 +422,6 @@ function renderShortcuts() {
                     touchDragClone.style.top = `${touch.clientY - card.offsetHeight / 2}px`;
                 }
 
-                // Check element under finger
                 const targetElem = document.elementFromPoint(touch.clientX, touch.clientY);
                 const targetCard = targetElem ? targetElem.closest('.shortcut-card:not(.add-shortcut-card)') : null;
 
@@ -399,15 +449,12 @@ function renderShortcuts() {
                     }
                 }
 
-                if (touchDragClone && touchDragClone.parentNode) {
-                    touchDragClone.parentNode.removeChild(touchDragClone);
-                }
-
-                draggedIndex = null;
-                isTouchDragging = false;
+                cleanupTouchDrag();
                 renderShortcuts();
             }
         });
+
+        card.addEventListener('touchcancel', cleanupTouchDrag);
 
         container.appendChild(card);
     });
@@ -415,15 +462,23 @@ function renderShortcuts() {
     const addCard = document.createElement('div');
     addCard.className = 'shortcut-card add-shortcut-card';
     addCard.id = 'addShortcutCard';
+    addCard.setAttribute('role', 'button');
+    addCard.setAttribute('tabindex', '0');
     addCard.innerHTML = `
         <div class="shortcut-icon-wrapper">
             <div class="shortcut-icon-fallback" style="background: transparent; color: var(--md-sys-color-primary);">
-                <span class="material-symbols-rounded" style="font-size: 32px;">add</span>
+                <span class="material-symbols-rounded" style="font-size: 32px;" aria-hidden="true">add</span>
             </div>
         </div>
         <div class="shortcut-title" style="color: var(--md-sys-color-primary);">${t.addShortcutBtn}</div>
     `;
     addCard.addEventListener('click', openAddShortcutModal);
+    addCard.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openAddShortcutModal();
+        }
+    });
     container.appendChild(addCard);
 }
 
@@ -471,12 +526,16 @@ function openAddShortcutModal() {
     editingShortcutIndex = -1;
     const t = i18n[currentLang] || i18n.zh;
     document.getElementById('shortcutModalTitle').innerHTML = `
-        <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">add_link</span>
-        <span>${t.addShortcutTitle}</span>
+        <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);" aria-hidden="true">add_link</span>
+        <span id="shortcutModalTitleText">${t.addShortcutTitle}</span>
     `;
     document.getElementById('siteName').value = '';
     document.getElementById('siteUrl').value = '';
     openModal('shortcutModal');
+    setTimeout(() => {
+        const nameInput = document.getElementById('siteName');
+        if (nameInput) nameInput.focus();
+    }, 50);
 }
 
 function openEditShortcutModal(index) {
@@ -484,12 +543,16 @@ function openEditShortcutModal(index) {
     const item = shortcuts[index];
     const t = i18n[currentLang] || i18n.zh;
     document.getElementById('shortcutModalTitle').innerHTML = `
-        <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">edit</span>
-        <span>${t.editShortcutTitle}</span>
+        <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);" aria-hidden="true">edit</span>
+        <span id="shortcutModalTitleText">${t.editShortcutTitle}</span>
     `;
     document.getElementById('siteName').value = item.name;
     document.getElementById('siteUrl').value = item.url;
     openModal('shortcutModal');
+    setTimeout(() => {
+        const nameInput = document.getElementById('siteName');
+        if (nameInput) nameInput.focus();
+    }, 50);
 }
 
 document.getElementById('saveShortcutBtn').addEventListener('click', () => {
@@ -502,7 +565,8 @@ document.getElementById('saveShortcutBtn').addEventListener('click', () => {
         return;
     }
 
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    // 协议安全性补全与校验
+    if (!/^https?:\/\//i.test(url)) {
         url = 'https://' + url;
     }
 
@@ -525,11 +589,30 @@ document.getElementById('cancelShortcutBtn').addEventListener('click', () => {
     closeModal('shortcutModal');
 });
 
-// --- Search Engine Selector ---
+// --- Search Engine Selector & Search Submission ---
 const engineSelector = document.getElementById('engineSelector');
 const engineMenu = document.getElementById('engineMenu');
 const searchForm = document.getElementById('searchForm');
 const searchInput = document.getElementById('searchInput');
+
+// 支持直接在搜索框中输入网址并跳转
+searchForm.addEventListener('submit', (e) => {
+    const query = searchInput.value.trim();
+    if (!query) {
+        e.preventDefault();
+        return;
+    }
+
+    if (isLikelyUrl(query)) {
+        e.preventDefault();
+        const targetUrl = /^https?:\/\//i.test(query) ? query : `https://${query}`;
+        if (searchTarget === '_blank') {
+            window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        } else {
+            window.location.href = targetUrl;
+        }
+    }
+});
 
 engineSelector.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -619,4 +702,15 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
             modal.classList.remove('active');
         }
     });
+});
+
+// 全局 Esc 键快速关闭弹窗与下拉菜单
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+        if (engineMenu) engineMenu.classList.remove('active');
+        if (contextMenu) contextMenu.classList.remove('active');
+        const colorPicker = document.getElementById('colorPickerPopover');
+        if (colorPicker) colorPicker.classList.remove('active');
+    }
 });

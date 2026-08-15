@@ -18,13 +18,13 @@
     <!-- Header Navigation -->
     <header>
         <div class="header-brand">
-            <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">auto_awesome</span>
+            <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);" aria-hidden="true">auto_awesome</span>
             <span>Startune</span>
         </div>
         <div class="header-actions">
             <!-- Settings Modal Button -->
-            <button class="icon-btn" id="settingsBtn" data-i18n-title="settingsBtnTitle" title="设置">
-                <span class="material-symbols-rounded">settings</span>
+            <button class="icon-btn" id="settingsBtn" data-i18n-title="settingsBtnTitle" title="设置" aria-label="设置">
+                <span class="material-symbols-rounded" aria-hidden="true">settings</span>
             </button>
         </div>
     </header>
@@ -51,8 +51,8 @@
                     </div>
                     <input type="text" name="q" class="search-input" id="searchInput" data-i18n-placeholder="searchInputPlaceholder" placeholder="搜索网络或输入网址..." autocomplete="off" autofocus>
                     <div class="search-actions">
-                        <button type="submit" class="search-btn" id="searchSubmitBtn" data-i18n-title="searchBtnTitle" title="开始搜索">
-                            <span class="material-symbols-rounded">search</span>
+                        <button type="submit" class="search-btn" id="searchSubmitBtn" data-i18n-title="searchBtnTitle" title="开始搜索" aria-label="开始搜索">
+                            <span class="material-symbols-rounded" aria-hidden="true">search</span>
                         </button>
                     </div>
                 </div>
@@ -98,19 +98,19 @@
     <div class="toast" id="toast">已复制</div>
 
     <!-- Add/Edit Shortcut Modal -->
-    <div class="modal-overlay" id="shortcutModal">
+    <div class="modal-overlay" id="shortcutModal" role="dialog" aria-modal="true" aria-labelledby="shortcutModalTitleText">
         <div class="modal-card">
             <div class="modal-title" id="shortcutModalTitle">
-                <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">add_link</span>
+                <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);" aria-hidden="true">add_link</span>
                 <span id="shortcutModalTitleText">添加快捷方式</span>
             </div>
             <div class="form-group">
                 <label for="siteName" data-i18n-text="labelShortcutName">名称</label>
-                <input type="text" id="siteName" class="form-input" data-i18n-placeholder="placeholderShortcutName" placeholder="例如：GitHub">
+                <input type="text" id="siteName" class="form-input" data-i18n-placeholder="placeholderShortcutName" placeholder="例如：GitHub" autocomplete="off">
             </div>
             <div class="form-group">
                 <label for="siteUrl" data-i18n-text="labelShortcutUrl">网址 (URL)</label>
-                <input type="url" id="siteUrl" class="form-input" placeholder="https://example.com">
+                <input type="url" id="siteUrl" class="form-input" placeholder="https://example.com" autocomplete="off">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-text" id="cancelShortcutBtn" data-i18n-text="btnCancel">取消</button>
@@ -120,11 +120,11 @@
     </div>
 
     <!-- Personalization & Settings Modal -->
-    <div class="modal-overlay" id="settingsModal">
+    <div class="modal-overlay" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitleText">
         <div class="modal-card">
             <div class="modal-title">
-                <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);">settings</span>
-                <span data-i18n-text="settingsTitle">设置</span>
+                <span class="material-symbols-rounded" style="color: var(--md-sys-color-primary);" aria-hidden="true">settings</span>
+                <span id="settingsModalTitleText" data-i18n-text="settingsTitle">设置</span>
             </div>
             <div class="form-group">
                 <label data-i18n-text="labelLanguage">语言 (Language)</label>
